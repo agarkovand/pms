@@ -30,4 +30,10 @@ public class Customer extends NamedEntity {
 		this.city = city;
 	}
 
+	@Override
+	public String toString() {
+		return "[Customer: " + super.toString() + ", country=" + country
+				+ ", city=" + city + "]";
+	}
+
 }

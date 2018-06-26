@@ -12,6 +12,4 @@ public interface GenericRepository<T, ID> {
 
 	public List<T> getAll();
 
-	public int update(T t);
-
 }

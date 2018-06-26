@@ -31,10 +31,4 @@ public class JdbcCustomerRepositoryImpl implements CustomerRepository {
 		return null;
 	}
 
-	@Override
-	public int update(Customer t) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }
