@@ -5,13 +5,57 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import app.exception.ApplicationException;
 import model.Customer;
+import repository.DAOException;
+import repository.jdbc.JdbcCustomerRepositoryImpl;
+import util.drm.ConnectionUtil;
 
 public class Application {
+
+	private static String customers_file = "/data/customers_to_add.csv";
+
+	public static void main(String[] args) throws ApplicationException {
+		Map<Long, Customer> customersWithIds = collectCustomersFromCsvFile(
+				customers_file);
+		saveCustomersToDB(new ArrayList<Customer>(customersWithIds.values()));
+	}
+
+	public static void saveCustomersToDB(List<Customer> customers) {
+
+		for (Customer customer : customers) {
+			saveCustomerToDb(customer);
+		}
+
+	}
+
+	private static void saveCustomerToDb(Customer customer) {
+
+		try (Connection conn = ConnectionUtil.getConnection();) {
+
+			JdbcCustomerRepositoryImpl dao = new JdbcCustomerRepositoryImpl(
+					conn);
+
+			try {
+				dao.save(customer);
+			} catch (DAOException ex) {
+				conn.rollback();
+			}
+
+			conn.commit();
+
+		} catch (SQLException | DAOException ex) {
+			System.out.println(ex.getMessage());
+		}
+
+	}
 
 	public static Object[] parseLineToCustomer(String line)
 			throws ApplicationException {
