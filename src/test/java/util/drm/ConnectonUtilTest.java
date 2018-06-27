@@ -12,12 +12,12 @@ public class ConnectonUtilTest {
 
 	@Test
 	public void connectionCreatedCorrectly() throws DAOException {
-		assertNotNull(ConnectonUtil.getConnection());
+		assertNotNull(ConnectionUtil.getConnection());
 	}
 
 	@Test
 	public void propertiesFromFileLoadedCorrectly() throws DAOException {
-		Properties props = ConnectonUtil.getPropertiesFromFile();
+		Properties props = ConnectionUtil.getPropertiesFromFile();
 		assertNotNull(props);
 		assertNotNull(props.getProperty("url"));
 		assertNotNull(props.getProperty("user"));

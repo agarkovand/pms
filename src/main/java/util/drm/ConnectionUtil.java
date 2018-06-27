@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import repository.DAOException;
 
-public class ConnectonUtil {
+public class ConnectionUtil {
 
 	private static final String PROP_FILE_NAME = "db.properties";
 	private static final String URL_PROP_NAME = "url";
@@ -79,7 +79,7 @@ public class ConnectonUtil {
 
 		Properties props = new Properties();
 
-		try (InputStream propStreamFromFile = ConnectonUtil.class
+		try (InputStream propStreamFromFile = ConnectionUtil.class
 				.getClassLoader().getResourceAsStream(PROP_FILE_NAME);) {
 
 			loadProperties(propStreamFromFile, props);
