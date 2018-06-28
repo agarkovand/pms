@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.List;
 
 import model.Customer;
+import model.Project;
 import repository.CustomerRepository;
 import repository.exception.DAOException;
 
@@ -63,11 +64,33 @@ public class JdbcCustomerRepositoryImpl implements CustomerRepository {
 			id = (long) keyRS.getInt(1);
 			customer.setId(id);
 
+			saveProjects(customer);
+
 		} catch (SQLException ex) {
 			throw new DAOException("Error saving customer: " + customer, ex);
+		} catch (DAOException ex) {
+			throw new DAOException(
+					"Error saving projects of the customer: " + customer, ex);
 		}
 
 		return customer;
+	}
+
+	protected void saveProjects(Customer customer) throws DAOException {
+
+		List<Project> projects = customer.getProjects();
+
+		if (projects.size() == 0) {
+			return;
+		}
+
+		JdbcProjectRepositoryImpl dao = new JdbcProjectRepositoryImpl();
+		dao.set(conn);
+		long customer_id = customer.getId();
+
+		for (Project project : projects) {
+			dao.save(project, customer_id);
+		}
 	}
 
 	@Override

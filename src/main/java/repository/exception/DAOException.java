@@ -8,7 +8,7 @@ public class DAOException extends Exception {
 		super(message);
 	}
 
-	public DAOException(String message, SQLException ex) {
+	public DAOException(String message, Exception ex) {
 		super(message, ex);
 	}
 

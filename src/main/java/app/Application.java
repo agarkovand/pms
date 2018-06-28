@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import model.Customer;
 import model.Project;
 import repository.StrongEntityRepository;
 import repository.exception.DAOException;
+import repository.jdbc.JdbcCustomerRepositoryImpl;
 import util.drm.ConnectionUtil;
 
 public class Application {
@@ -35,8 +37,8 @@ public class Application {
 
 		System.out.println(customers);
 
-		// saveEntitiesToDB(new ArrayList<Customer>(customers.values()),
-		// new JdbcCustomerRepositoryImpl());
+		saveEntitiesToDB(new ArrayList<Customer>(customers.values()),
+				new JdbcCustomerRepositoryImpl());
 	}
 
 	private static void populateCustomersWithProjectsFromCsvFile(
