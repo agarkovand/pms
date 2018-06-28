@@ -17,7 +17,6 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 	@Override
 	public void set(Connection conn) {
 		this.conn = conn;
-
 	}
 
 	private static final String TABLE = "project";
@@ -35,7 +34,7 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 			PLAN_FINISH, ID);
 
 	@Override
-	public Project save(Project t) throws DAOException {
+	public Project save(Project t, Long customer_id) throws DAOException {
 		// TODO Auto-generated method stub
 		return null;
 	}

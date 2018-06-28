@@ -17,7 +17,7 @@ import app.parsers.CustomerParser;
 import app.parsers.ProjectParser;
 import model.Customer;
 import model.Project;
-import repository.GenericRepository;
+import repository.StrongEntityRepository;
 import repository.exception.DAOException;
 import util.drm.ConnectionUtil;
 
@@ -43,12 +43,11 @@ public class Application {
 			Map<Long, Customer> customers, String projects_file)
 			throws ApplicationException {
 
-		Map<Long, Project> projects = collectEntitiesFromCsvFile(
-				projects_file, new ProjectParser());
+		Map<Long, Project> projects = collectEntitiesFromCsvFile(projects_file,
+				new ProjectParser());
 
 		// for each project entry (<id,project>
-		for (Map.Entry<Long, Project> projectEntry : projects
-				.entrySet()) {
+		for (Map.Entry<Long, Project> projectEntry : projects.entrySet()) {
 
 			// get corresponding customer by id
 			Long id = projectEntry.getKey();
@@ -62,7 +61,7 @@ public class Application {
 	}
 
 	public static <T, ID> void saveEntitiesToDB(List<T> t,
-			GenericRepository<T, ID> repo) {
+			StrongEntityRepository<ID, T> repo) {
 
 		for (T item : t) {
 

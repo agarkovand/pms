@@ -19,7 +19,7 @@ public class CustomerParserTest {
 	}
 
 	@Test(expected = ApplicationException.class)
-	public void ifWrongNumberOfTokensInLineShouldThrowApplicationException()
+	public void whenWrongNumberOfTokensInLineShouldThrowApplicationException()
 			throws ApplicationException {
 
 		String customerData = "3,Cust3,Ukraine,Odessa,Kiev";
@@ -27,7 +27,7 @@ public class CustomerParserTest {
 	}
 
 	@Test(expected = ApplicationException.class)
-	public void ifLineIsNullOrEmptyShouldThrowApplicationException()
+	public void whenLineIsNullOrEmptyShouldThrowApplicationException()
 			throws ApplicationException {
 
 		String customerData = "";
@@ -37,7 +37,8 @@ public class CustomerParserTest {
 	}
 
 	@Test
-	public void testParse() throws ApplicationException {
+	public void correctLineShouldBeConvertedIntoCustomerObject()
+			throws ApplicationException {
 
 		String customerData = "3,Cust3,Ukraine,Odessa";
 

@@ -77,13 +77,13 @@ public class JdbcCustomerRepositoryImpl implements CustomerRepository {
 	}
 
 	@Override
-	public int delete(Long id) {
+	public int delete(long id) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public Customer getById(Long id) {
+	public Customer getById(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

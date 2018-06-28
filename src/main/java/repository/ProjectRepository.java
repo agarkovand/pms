@@ -2,6 +2,7 @@ package repository;
 
 import model.Project;
 
-public interface ProjectRepository extends GenericRepository<Project, Long> {
+public interface ProjectRepository
+		extends WeakEntityRepository<Long, Project> {
 
 }
