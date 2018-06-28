@@ -3,6 +3,8 @@ package app.parsers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.time.LocalDate;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,8 +21,10 @@ public class ProjectParserTest {
 	}
 
 	@Test
-	public void testParse() throws ApplicationException {
+	public void whenValidDataLine_RelevantProjectObjectShouldBeCreated()
+			throws ApplicationException {
 
+		// name,project_start,planned_finish,actual_finish,customer_id
 		String projectData = "Pr6,2016-01-01,,,3";
 		Object[] result = testedObj.parse(projectData);
 
@@ -30,6 +34,7 @@ public class ProjectParserTest {
 		Project project = (Project) result[1];
 
 		assertEquals("Pr6", project.getName());
+		assertEquals(LocalDate.parse("2016-01-01"), project.getProject_start());
 
 	}
 

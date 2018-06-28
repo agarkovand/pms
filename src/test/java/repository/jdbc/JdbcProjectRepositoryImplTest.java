@@ -2,7 +2,7 @@ package repository.jdbc;
 
 import static org.junit.Assert.fail;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +15,8 @@ public class JdbcProjectRepositoryImplTest {
 
 	@Before
 	public void setUp() {
-		existingProject = new Project("Pr6", Date.valueOf("2016-01-01"),
-				Date.valueOf("2020-12-31"), null);
+		existingProject = new Project("Pr6", LocalDate.parse("2016-01-01"),
+				LocalDate.parse("2020-12-31"), null);
 	}
 
 	@Test

@@ -1,8 +1,7 @@
 package app.parsers;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import app.exception.ApplicationException;
 import model.Project;
@@ -15,7 +14,6 @@ import model.Project;
 public class ProjectParser extends AbstractEntityParser<Project> {
 
 	private static final int NUMBER_OF_TOKENS = 5;
-	private final SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
 
 	@Override
 	public Object[] parse(String line) throws ApplicationException {
@@ -30,9 +28,9 @@ public class ProjectParser extends AbstractEntityParser<Project> {
 
 		String name = tokens[0];
 
-		Date project_start = parseDate(tokens[1]);
-		Date planned_finish = parseDate(tokens[2]);
-		Date actual_finish = parseDate(tokens[3]);
+		LocalDate project_start = parseDate(tokens[1]);
+		LocalDate planned_finish = parseDate(tokens[2]);
+		LocalDate actual_finish = parseDate(tokens[3]);
 
 		Project project = new Project(name, project_start, planned_finish,
 				actual_finish);
@@ -40,11 +38,11 @@ public class ProjectParser extends AbstractEntityParser<Project> {
 		return new Object[] { id, project };
 	}
 
-	private Date parseDate(String dateString) {
+	private LocalDate parseDate(String dateString) {
 
 		try {
-			return new Date(sdf.parse(dateString).getTime());
-		} catch (ParseException e) {
+			return LocalDate.parse(dateString);
+		} catch (DateTimeParseException e) {
 			System.out.println(e.getMessage());
 			return null;
 		}
