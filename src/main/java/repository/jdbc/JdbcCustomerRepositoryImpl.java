@@ -9,7 +9,7 @@ import java.util.List;
 
 import model.Customer;
 import repository.CustomerRepository;
-import repository.DAOException;
+import repository.exception.DAOException;
 
 public class JdbcCustomerRepositoryImpl implements CustomerRepository {
 
@@ -18,22 +18,23 @@ public class JdbcCustomerRepositoryImpl implements CustomerRepository {
 	 */
 	private Connection conn;
 
-	public JdbcCustomerRepositoryImpl(Connection conn) {
+	@Override
+	public void set(Connection conn) {
 		this.conn = conn;
 	}
 
-	private static final String table = "customer";
-	private static final String id = "id";
-	private static final String name = "name";
-	private static final String country = "country";
-	private static final String city = "city";
+	private static final String TABLE = "customer";
+	private static final String ID = "id";
+	private static final String NAME = "name";
+	private static final String COUNTRY = "country";
+	private static final String CITY = "city";
 
 	private static final String insertSQL = String.format(
-			"INSERT INTO %s (%s, %s, %s) VALUES (?,?,?);", table, name, country,
-			city);
+			"INSERT INTO %s (%s, %s, %s) VALUES (?,?,?);", TABLE, NAME, COUNTRY,
+			CITY);
 	private static final String updateSQL = String.format(
-			"UPDATE %s SET %s=?, %s=?, %s=? WHERE %s=?", table, name, country,
-			city, id);
+			"UPDATE %s SET %s=?, %s=?, %s=? WHERE %s=?", TABLE, NAME, COUNTRY,
+			CITY, ID);
 
 	@Override
 	public Customer save(Customer customer) throws DAOException {

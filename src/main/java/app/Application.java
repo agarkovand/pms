@@ -7,86 +7,88 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import app.exception.ApplicationException;
+import app.parsers.AbstractEntityParser;
+import app.parsers.CustomerParser;
+import app.parsers.ProjectParser;
 import model.Customer;
-import repository.DAOException;
-import repository.jdbc.JdbcCustomerRepositoryImpl;
+import model.Project;
+import repository.GenericRepository;
+import repository.exception.DAOException;
 import util.drm.ConnectionUtil;
 
 public class Application {
 
 	private static String customers_file = "/data/customers_to_add.csv";
+	private static String projects_file = "/data/projects_to_add.csv";
 
 	public static void main(String[] args) throws ApplicationException {
-		Map<Long, Customer> customersWithIds = collectCustomersFromCsvFile(
-				customers_file);
-		saveCustomersToDB(new ArrayList<Customer>(customersWithIds.values()));
+
+		Map<Long, Customer> customers = collectEntitiesFromCsvFile(
+				customers_file, new CustomerParser());
+
+		populateCustomersWithProjectsFromCsvFile(customers, projects_file);
+
+		System.out.println(customers);
+
+		// saveEntitiesToDB(new ArrayList<Customer>(customers.values()),
+		// new JdbcCustomerRepositoryImpl());
 	}
 
-	public static void saveCustomersToDB(List<Customer> customers) {
-
-		for (Customer customer : customers) {
-			saveCustomerToDb(customer);
-		}
-
-	}
-
-	private static void saveCustomerToDb(Customer customer) {
-
-		try (Connection conn = ConnectionUtil.getConnection();) {
-
-			JdbcCustomerRepositoryImpl dao = new JdbcCustomerRepositoryImpl(
-					conn);
-
-			try {
-				dao.save(customer);
-			} catch (DAOException ex) {
-				conn.rollback();
-			}
-
-			conn.commit();
-
-		} catch (SQLException | DAOException ex) {
-			System.out.println(ex.getMessage());
-		}
-
-	}
-
-	public static Object[] parseLineToCustomer(String line)
+	private static void populateCustomersWithProjectsFromCsvFile(
+			Map<Long, Customer> customers, String projects_file)
 			throws ApplicationException {
 
-		if (line == null || line.isEmpty()) {
-			throw new ApplicationException("Input line is null or empty.");
+		Map<Long, Project> projects = collectEntitiesFromCsvFile(
+				projects_file, new ProjectParser());
+
+		// for each project entry (<id,project>
+		for (Map.Entry<Long, Project> projectEntry : projects
+				.entrySet()) {
+
+			// get corresponding customer by id
+			Long id = projectEntry.getKey();
+			Customer customer = customers.get(id);
+
+			// put project to its customer's list of projects
+			Project project = projectEntry.getValue();
+			customer.addProject(project);
 		}
 
-		String[] tokens = line.split(",");
-
-		if (tokens.length != 4) {
-			throw new ApplicationException(String.format(
-					"Input line should contain 4 tokens. It contains %s tokens instead.",
-					tokens.length));
-		}
-
-		long id = Long.parseLong(tokens[0]);
-
-		String name = tokens[1];
-		String country = tokens[2];
-		String city = tokens[3];
-
-		Customer customer = new Customer(name, country, city);
-
-		return new Object[] { id, customer };
 	}
 
-	public static Map<Long, Customer> collectCustomersFromCsvFile(
-			String fileName) throws ApplicationException {
+	public static <T, ID> void saveEntitiesToDB(List<T> t,
+			GenericRepository<T, ID> repo) {
 
-		Map<Long, Customer> customers = new HashMap<>();
+		for (T item : t) {
+
+			try (Connection conn = ConnectionUtil.getConnection();) {
+
+				repo.set(conn);
+
+				try {
+					repo.save(item);
+				} catch (DAOException ex) {
+					conn.rollback();
+				}
+
+				conn.commit();
+
+			} catch (SQLException | DAOException ex) {
+				System.out.println(ex.getMessage());
+			}
+		}
+
+	}
+
+	public static <T> Map<Long, T> collectEntitiesFromCsvFile(String fileName,
+			AbstractEntityParser<T> entityParser) throws ApplicationException {
+
+		Map<Long, T> items = new HashMap<>();
 		String line;
 		Object[] item;
 
@@ -95,8 +97,8 @@ public class Application {
 				BufferedReader bfr = new BufferedReader(isr);) {
 
 			while ((line = bfr.readLine()) != null) {
-				item = parseLineToCustomer(line);
-				customers.put((Long) item[0], (Customer) item[1]);
+				item = entityParser.parse(line);
+				items.put((Long) item[0], (T) item[1]);
 			}
 
 		} catch (FileNotFoundException e) {
@@ -105,6 +107,6 @@ public class Application {
 			throw new ApplicationException("Problem reading file: " + fileName);
 		}
 
-		return customers;
+		return items;
 	}
 }

@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import model.Customer;
 import repository.CustomerRepository;
-import repository.DAOException;
+import repository.exception.DAOException;
 import util.drm.ConnectionUtil;
 
 public class JdbcCustomerRepositoryImplTest {
@@ -37,30 +37,21 @@ public class JdbcCustomerRepositoryImplTest {
 			try {
 				conn.setAutoCommit(false);
 
-				dao = new JdbcCustomerRepositoryImpl(conn);
+				dao = new JdbcCustomerRepositoryImpl();
+				dao.set(conn);
 				newCustomer = dao.save(newCustomer);
 
-				postProcessConnection(conn, null);
+				ConnectionUtil.clearConnection(conn, null);
 
-			} catch (SQLException ex) {
-				postProcessConnection(conn, ex);
-			} catch (DAOException ex) {
-				postProcessConnection(conn, ex);
+			} catch (SQLException | DAOException ex) {
+				ConnectionUtil.clearConnection(conn, ex);
 			}
+
 		} catch (DAOException ex) {
 			System.out.println(ex.getMessage());
 		}
 
 		assertNotNull(newCustomer.getId());
-	}
-
-	private void postProcessConnection(Connection conn, Exception ex)
-			throws SQLException {
-		conn.rollback();
-		conn.setAutoCommit(true);
-		if (ex != null) {
-			System.out.println(ex.getMessage());
-		}
 	}
 
 	@Test

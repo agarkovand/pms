@@ -1,6 +1,9 @@
 package repository;
 
+import java.sql.Connection;
 import java.util.List;
+
+import repository.exception.DAOException;
 
 public interface GenericRepository<T, ID> {
 
@@ -13,5 +16,7 @@ public interface GenericRepository<T, ID> {
 	public T getById(ID id);
 
 	public List<T> getAll();
+
+	public void set(Connection conn);
 
 }
