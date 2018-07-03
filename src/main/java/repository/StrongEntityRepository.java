@@ -8,7 +8,7 @@ public interface StrongEntityRepository<ID, T> extends DbRepository {
 
 	public T save(T t) throws DAOException;
 
-	public int update(T t);
+	public int update(T t) throws DAOException;
 
 	public int delete(long id);
 

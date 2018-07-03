@@ -1,5 +1,6 @@
 package repository.jdbc;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -52,6 +53,33 @@ public class JdbcCustomerRepositoryImplTest {
 		}
 
 		assertNotNull(newCustomer.getId());
+	}
+
+	@Test
+	public void testUpdate() throws SQLException {
+
+		int id = 0;
+
+		try (Connection conn = ConnectionUtil.getConnection();) {
+
+			try {
+				conn.setAutoCommit(false);
+
+				dao = new JdbcCustomerRepositoryImpl();
+				dao.set(conn);
+				id = dao.update(newCustomer);
+
+				ConnectionUtil.clearConnection(conn, null);
+
+			} catch (SQLException | DAOException ex) {
+				ConnectionUtil.clearConnection(conn, ex);
+			}
+
+		} catch (DAOException ex) {
+			System.out.println(ex.getMessage());
+		}
+
+		assertEquals(1, id);
 	}
 
 	@Test

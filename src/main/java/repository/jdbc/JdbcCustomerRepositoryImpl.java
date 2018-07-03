@@ -12,7 +12,8 @@ import model.Project;
 import repository.CustomerRepository;
 import repository.exception.DAOException;
 
-public class JdbcCustomerRepositoryImpl implements CustomerRepository {
+public class JdbcCustomerRepositoryImpl
+		implements CustomerRepository {
 
 	/**
 	 * Connection is going to be configured and set from client code.
@@ -31,11 +32,11 @@ public class JdbcCustomerRepositoryImpl implements CustomerRepository {
 	private static final String CITY = "city";
 
 	private static final String insertSQL = String.format(
-			"INSERT INTO %s (%s, %s, %s) VALUES (?,?,?);", TABLE, NAME, COUNTRY,
-			CITY);
+			"INSERT INTO %s (%s, %s, %s) VALUES (?,?,?);", TABLE,
+			NAME, COUNTRY, CITY);
 	private static final String updateSQL = String.format(
-			"UPDATE %s SET %s=?, %s=?, %s=? WHERE %s=?", TABLE, NAME, COUNTRY,
-			CITY, ID);
+			"UPDATE %s SET %s=?, %s=?, %s=? WHERE %s=?", TABLE, NAME,
+			COUNTRY, CITY, ID);
 
 	@Override
 	public Customer save(Customer customer) throws DAOException {
@@ -44,14 +45,15 @@ public class JdbcCustomerRepositoryImpl implements CustomerRepository {
 
 		if (id != null) {
 			throw new DAOException(
-					"Trying to persist existing customer: " + customer);
+					"Trying to persist existing customer: "
+							+ customer);
 		}
 
 		/**
 		 * Connection is going to be closed in client code.
 		 */
-		try (PreparedStatement statement = conn.prepareStatement(insertSQL,
-				Statement.RETURN_GENERATED_KEYS)) {
+		try (PreparedStatement statement = conn.prepareStatement(
+				insertSQL, Statement.RETURN_GENERATED_KEYS)) {
 
 			statement.setString(1, customer.getName());
 			statement.setString(2, customer.getCountry());
@@ -67,16 +69,20 @@ public class JdbcCustomerRepositoryImpl implements CustomerRepository {
 			saveProjects(customer);
 
 		} catch (SQLException ex) {
-			throw new DAOException("Error saving customer: " + customer, ex);
+			throw new DAOException(
+					"Error saving customer: " + customer, ex);
 		} catch (DAOException ex) {
 			throw new DAOException(
-					"Error saving projects of the customer: " + customer, ex);
+					"Error saving projects of the customer: "
+							+ customer,
+					ex);
 		}
 
 		return customer;
 	}
 
-	protected void saveProjects(Customer customer) throws DAOException {
+	protected void saveProjects(Customer customer)
+			throws DAOException {
 
 		List<Project> projects = customer.getProjects();
 
@@ -94,7 +100,7 @@ public class JdbcCustomerRepositoryImpl implements CustomerRepository {
 	}
 
 	@Override
-	public int update(Customer t) {
+	public int update(Customer t) throws DAOException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
