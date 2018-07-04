@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import model.Customer;
 import repository.jdbc.util.JdbcRepositoryTestUtil;
+import repository.jdbc.util.impl.CustomerDeleteTestAction;
 import repository.jdbc.util.impl.CustomerSaveTestAction;
 import repository.jdbc.util.impl.CustomerUpdateTestAction;
 
@@ -47,8 +48,14 @@ public class JdbcCustomerRepositoryImplTest {
 	}
 
 	@Test
-	public void testDelete() {
-		fail("Not yet implemented");
+	public void testDelete() throws SQLException {
+
+		Object[] result = new JdbcRepositoryTestUtil().performTest(
+				new CustomerDeleteTestAction(existingCustomer));
+
+		int rowsAffected = (result.length == 0) ? 0 : (int) result[0];
+
+		assertEquals(1, rowsAffected);
 	}
 
 	@Test
