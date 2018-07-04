@@ -18,7 +18,6 @@ public class CustomerDeleteTestAction
 
 		dao.set(conn);
 		int affectedRowsCount = dao.delete(customer);
-		System.out.println(affectedRowsCount);
 		return new Object[] { affectedRowsCount };
 	}
 
