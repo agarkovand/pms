@@ -4,11 +4,10 @@ import java.sql.Connection;
 
 import model.Customer;
 import repository.exception.DAOException;
-import repository.jdbc.util.AbstractJdbcTestAction;
 import repository.jdbc.util.CustomerAbstractJdbcTestAction;
 
-public class CustomerUpdateTestAction extends CustomerAbstractJdbcTestAction
-		implements AbstractJdbcTestAction {
+public class CustomerUpdateTestAction
+		extends CustomerAbstractJdbcTestAction {
 
 	public CustomerUpdateTestAction(Customer existingCustomer) {
 		this.customer = existingCustomer;

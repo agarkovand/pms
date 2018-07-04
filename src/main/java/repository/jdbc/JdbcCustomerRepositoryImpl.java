@@ -25,12 +25,18 @@ public class JdbcCustomerRepositoryImpl
 		this.conn = conn;
 	}
 
+	/**
+	 * customer table
+	 */
 	private static final String TABLE = "customer";
 	private static final String ID = "id";
 	private static final String NAME = "name";
 	private static final String COUNTRY = "country";
 	private static final String CITY = "city";
 
+	/**
+	 * INSERT INTO customer (name,country,city) VALUES (?,?,?);
+	 */
 	private static final String insertSQL = String.format(
 			"INSERT INTO %s (%s, %s, %s) VALUES (?,?,?);", TABLE,
 			NAME, COUNTRY, CITY);
@@ -83,7 +89,7 @@ public class JdbcCustomerRepositoryImpl
 
 		List<Project> projects = customer.getProjects();
 
-		if (projects.size() == 0) {
+		if (projects == null || projects.size() == 0) {
 			return;
 		}
 
@@ -133,10 +139,56 @@ public class JdbcCustomerRepositoryImpl
 		return count;
 	}
 
+	/**
+	 * DELETE FROM customer WHERE id=?;
+	 */
+	private static final String deleteSQL = String
+			.format("DELETE FROM %s WHERE %s=?", TABLE, ID);
+
 	@Override
-	public int delete(long id) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int delete(Customer customer) throws DAOException {
+
+		Long id = customer.getId();
+
+		if (id == null) {
+			throw new DAOException(
+					"Trying to delete new customer: " + customer);
+		}
+
+		int count = 0;
+
+		try (PreparedStatement statement = conn
+				.prepareStatement(deleteSQL);) {
+
+			// Delete projects for this customer
+			deleteProjects(customer);
+
+			statement.setLong(1, customer.getId());
+
+			count = statement.executeUpdate();
+
+		} catch (SQLException ex) {
+			throw new DAOException("Error deleting customer with id: "
+					+ customer.getId(), ex);
+		} catch (DAOException ex) {
+			throw new DAOException(
+					"Error deleting projects for customer_id: "
+							+ customer.getId(),
+					ex);
+		}
+
+		return count;
+	}
+
+	protected void deleteProjects(Customer customer)
+			throws DAOException {
+
+		JdbcProjectRepositoryImpl dao = new JdbcProjectRepositoryImpl();
+		dao.set(conn);
+		long customer_id = customer.getId();
+
+		dao.deleteByParent(customer_id);
+
 	}
 
 	@Override

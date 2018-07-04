@@ -11,7 +11,7 @@ public interface DbRepository<T> {
 
 	public int update(T t) throws DAOException;
 
-	public int delete(long id);
+	public int delete(T t) throws DAOException;
 
 	public T getById(long id);
 

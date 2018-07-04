@@ -79,6 +79,19 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 		return project;
 	}
 
+	/**
+	 * DELETE FROM project WHERE customer_id=?;
+	 */
+	private static final String deleteProjectsSQL = String
+			.format("DELETE FROM %s WHERE %s=?", TABLE, CUSTOMER_ID);
+
+	@Override
+	public int deleteByParent(Long strong_entity_id)
+			throws DAOException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	@Override
 	public int update(Project t) throws DAOException {
 		// TODO Auto-generated method stub
@@ -86,7 +99,7 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 	}
 
 	@Override
-	public int delete(long id) {
+	public int delete(Project project) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
