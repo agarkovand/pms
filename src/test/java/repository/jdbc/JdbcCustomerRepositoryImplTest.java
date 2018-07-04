@@ -25,7 +25,7 @@ public class JdbcCustomerRepositoryImplTest {
 	public void setUp() {
 		newCustomer = new Customer("TestName", "Ukraine", "Lvov");
 		existingCustomer = new Customer("Cust1", "Ukraine", "Kiev");
-		existingCustomer.setId(1L);
+		existingCustomer.setId(3L);
 	}
 
 	@Test
@@ -58,16 +58,17 @@ public class JdbcCustomerRepositoryImplTest {
 	@Test
 	public void testUpdate() throws SQLException {
 
-		int id = 0;
+		long id = 0;
 
 		try (Connection conn = ConnectionUtil.getConnection();) {
 
 			try {
+
 				conn.setAutoCommit(false);
 
 				dao = new JdbcCustomerRepositoryImpl();
 				dao.set(conn);
-				id = dao.update(newCustomer);
+				id = dao.update(existingCustomer);
 
 				ConnectionUtil.clearConnection(conn, null);
 

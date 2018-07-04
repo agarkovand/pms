@@ -34,9 +34,6 @@ public class JdbcCustomerRepositoryImpl
 	private static final String insertSQL = String.format(
 			"INSERT INTO %s (%s, %s, %s) VALUES (?,?,?);", TABLE,
 			NAME, COUNTRY, CITY);
-	private static final String updateSQL = String.format(
-			"UPDATE %s SET %s=?, %s=?, %s=? WHERE %s=?", TABLE, NAME,
-			COUNTRY, CITY, ID);
 
 	@Override
 	public Customer save(Customer customer) throws DAOException {
@@ -99,10 +96,41 @@ public class JdbcCustomerRepositoryImpl
 		}
 	}
 
+	/**
+	 * UPDATE customer SET name=?, country=?, city=? WHERE id=?;
+	 */
+	private static final String updateSQL = String.format(
+			"UPDATE %s SET %s=?, %s=?, %s=? WHERE %s=?", TABLE, NAME,
+			COUNTRY, CITY, ID);
+
 	@Override
-	public int update(Customer t) throws DAOException {
-		// TODO Auto-generated method stub
-		return 0;
+	public int update(Customer customer) throws DAOException {
+
+		Long id = customer.getId();
+
+		if (id == null) {
+			throw new DAOException(
+					"Trying to update new customer: " + customer);
+		}
+
+		int count = 0;
+
+		try (PreparedStatement statement = conn
+				.prepareStatement(updateSQL);) {
+
+			statement.setString(1, customer.getName());
+			statement.setString(2, customer.getCountry());
+			statement.setString(3, customer.getCity());
+			statement.setLong(4, id);
+
+			count = statement.executeUpdate();
+
+		} catch (SQLException ex) {
+			throw new DAOException(
+					"Error updating customer: " + customer, ex);
+		}
+
+		return count;
 	}
 
 	@Override
