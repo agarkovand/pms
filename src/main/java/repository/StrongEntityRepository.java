@@ -1,19 +1,9 @@
 package repository;
 
-import java.util.List;
-
 import repository.exception.DAOException;
 
-public interface StrongEntityRepository<ID, T> extends DbRepository {
+public interface StrongEntityRepository<T> extends DbRepository<T> {
 
 	public T save(T t) throws DAOException;
-
-	public int update(T t) throws DAOException;
-
-	public int delete(long id);
-
-	public T getById(long id);
-
-	public List<T> getAll();
 
 }

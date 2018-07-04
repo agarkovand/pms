@@ -32,28 +32,31 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 
 	/**
 	 * INSERT INTO project
-	 * (customer_id,title,project_start,planned_finish,actual_finish) VALUES
-	 * (?,?,?,?,?);
+	 * (customer_id,title,project_start,planned_finish,actual_finish)
+	 * VALUES (?,?,?,?,?);
 	 */
 	private static final String insertSQL = String.format(
-			"INSERT INTO %s (%s,%s,%s,%s,%s) VALUES (?,?,?,?,?);", TABLE,
-			CUSTOMER_ID, NAME, START, PLAN_FINISH, ACTUAL_FINISH);
+			"INSERT INTO %s (%s,%s,%s,%s,%s) VALUES (?,?,?,?,?);",
+			TABLE, CUSTOMER_ID, NAME, START, PLAN_FINISH,
+			ACTUAL_FINISH);
 
 	@Override
-	public Project save(Project project, Long customer_id) throws DAOException {
+	public Project save(Project project, Long customer_id)
+			throws DAOException {
 
 		Long id = project.getId();
 
 		if (id != null) {
 			throw new DAOException(
-					"Trying to persist existing customer: " + project);
+					"Trying to persist existing customer: "
+							+ project);
 		}
 
 		/**
 		 * Connection is going to be closed in client code.
 		 */
-		try (PreparedStatement statement = conn.prepareStatement(insertSQL,
-				Statement.RETURN_GENERATED_KEYS);) {
+		try (PreparedStatement statement = conn.prepareStatement(
+				insertSQL, Statement.RETURN_GENERATED_KEYS);) {
 
 			statement.setLong(1, customer_id);
 			statement.setString(2, project.getName());
@@ -69,26 +72,27 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 			project.setId(id);
 
 		} catch (SQLException ex) {
-			throw new DAOException("Error creating project: " + project, ex);
+			throw new DAOException(
+					"Error creating project: " + project, ex);
 		}
 
 		return project;
 	}
 
 	@Override
-	public int update(Project t) {
+	public int update(Project t) throws DAOException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int delete(Long id) {
+	public int delete(long id) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public Project getById(Long id) {
+	public Project getById(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
