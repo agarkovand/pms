@@ -2,9 +2,10 @@ package repository.jdbc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import model.Customer;
 import repository.jdbc.util.JdbcRepositoryTestUtil;
 import repository.jdbc.util.impl.CustomerDeleteTestAction;
+import repository.jdbc.util.impl.CustomerGetAllTestAction;
 import repository.jdbc.util.impl.CustomerGetByIdTestAction;
 import repository.jdbc.util.impl.CustomerSaveTestAction;
 import repository.jdbc.util.impl.CustomerUpdateTestAction;
@@ -72,14 +74,26 @@ public class JdbcCustomerRepositoryImplTest {
 		Customer customer = ((result.length == 0) ? null
 				: (Customer) result[0]);
 
-		assertNotNull(customer);
+		assertNotNull(customer.getId());
+		assertNotNull(customer.getName());
+		assertNotNull(customer.getCountry());
+		assertNotNull(customer.getCity());
 
 		System.out.println(customer);
 	}
 
 	@Test
-	public void testGetAll() {
-		fail("Not yet implemented");
+	public void testGetAll() throws SQLException {
+
+		Object[] result = new JdbcRepositoryTestUtil()
+				.performTest(new CustomerGetAllTestAction());
+
+		List<Customer> customers = ((result.length == 0) ? null
+				: (List) result[0]);
+
+		assertNotNull(customers);
+		assertTrue(customers.size() > 0);
+
 	}
 
 }

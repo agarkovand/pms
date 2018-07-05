@@ -183,10 +183,33 @@ public class JdbcCustomerRepositoryImpl
 			ID_COLUMN);
 
 	@Override
-	public Customer getById(long id) {
+	public Customer getById(long id) throws DAOException {
 
 		System.out.println(findByIdSQL);
-		return null;
+
+		Customer customer = new Customer();
+
+		try (PreparedStatement ps = conn
+				.prepareStatement(findByIdSQL);) {
+
+			ps.setLong(1, id);
+			ps.executeUpdate();
+
+			ResultSet rs = ps.getResultSet();
+			rs.next();
+
+			customer.setId(rs.getLong(ID_COLUMN));
+			customer.setName(rs.getString(NAME_COLUMN));
+			customer.setCountry(rs.getString(COUNTRY_COLUMN));
+			customer.setCity(rs.getString(CITY_COLUMN));
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+			throw new DAOException(
+					"Error finding customer with id: " + id, ex);
+		}
+
+		return customer;
 	}
 
 	@Override

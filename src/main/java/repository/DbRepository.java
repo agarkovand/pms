@@ -13,7 +13,7 @@ public interface DbRepository<T> {
 
 	public int delete(T t) throws DAOException;
 
-	public T getById(long id);
+	public T getById(long id) throws DAOException;
 
 	public List<T> getAll();
 }
