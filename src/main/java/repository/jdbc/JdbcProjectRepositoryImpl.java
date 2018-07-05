@@ -23,12 +23,16 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 		this.conn = conn;
 	}
 
-	private static final String TABLE = "project";
-	private static final String CUSTOMER_ID = "customer_id";
-	private static final String NAME = "title";
-	private static final String START = "project_start";
-	private static final String PLAN_FINISH = "planned_finish";
-	private static final String ACTUAL_FINISH = "actual_finish";
+	/**
+	 * project table details
+	 */
+	private static final String PROJECT_TABLE = "project";
+	private static final String ID_COLUMN = "id";
+	private static final String CUSTOMER_ID_COLUMN = "customer_id";
+	private static final String NAME_COLUMN = "title";
+	private static final String START_COLUMN = "project_start";
+	private static final String PLAN_FINISH_COLUMN = "planned_finish";
+	private static final String ACTUAL_FINISH_COLUMN = "actual_finish";
 
 	/**
 	 * INSERT INTO project
@@ -37,11 +41,11 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 	 */
 	private static final String insertSQL = String.format(
 			"INSERT INTO %s (%s,%s,%s,%s,%s) VALUES (?,?,?,?,?);",
-			TABLE, CUSTOMER_ID, NAME, START, PLAN_FINISH,
-			ACTUAL_FINISH);
+			PROJECT_TABLE, CUSTOMER_ID_COLUMN, NAME_COLUMN,
+			START_COLUMN, PLAN_FINISH_COLUMN, ACTUAL_FINISH_COLUMN);
 
 	@Override
-	public Project save(Project project, Long customer_id)
+	public Project save(Project project, Long customerId)
 			throws DAOException {
 
 		Long id = project.getId();
@@ -58,7 +62,7 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 		try (PreparedStatement statement = conn.prepareStatement(
 				insertSQL, Statement.RETURN_GENERATED_KEYS);) {
 
-			statement.setLong(1, customer_id);
+			statement.setLong(1, customerId);
 			statement.setString(2, project.getName());
 			statement.setObject(3, project.getProject_start());
 			statement.setObject(4, project.getPlanned_finish());
@@ -80,16 +84,38 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 	}
 
 	/**
+	 * 
 	 * DELETE FROM project WHERE customer_id=?;
+	 * 
+	 * DELETE FROM %s WHERE %s=?;
+	 * 
 	 */
-	private static final String deleteProjectsSQL = String
-			.format("DELETE FROM %s WHERE %s=?", TABLE, CUSTOMER_ID);
+	private static final String deleteByParentSQL = String.format(
+			"DELETE FROM %s WHERE %s=?;", PROJECT_TABLE,
+			CUSTOMER_ID_COLUMN);
 
 	@Override
-	public int deleteByParent(Long strong_entity_id)
+	public int deleteByParent(Long strongEntityId)
 			throws DAOException {
-		// TODO Auto-generated method stub
-		return 0;
+
+		System.out.println(deleteByParentSQL);
+		int count = 0;
+
+		try (PreparedStatement ps = conn
+				.prepareStatement(deleteByParentSQL);) {
+
+			ps.setLong(1, strongEntityId);
+
+			count = ps.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+			throw new DAOException("Error deleting projects for "
+					+ CUSTOMER_ID_COLUMN + ": " + strongEntityId,
+					ex);
+		}
+
+		return count;
 	}
 
 	@Override

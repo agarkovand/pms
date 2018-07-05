@@ -7,6 +7,7 @@ public abstract class CustomerAbstractJdbcTestAction
 		implements AbstractJdbcTestAction {
 
 	protected Customer customer;
+	protected long customerId;
 	protected JdbcCustomerRepositoryImpl dao = new JdbcCustomerRepositoryImpl();
 
 }

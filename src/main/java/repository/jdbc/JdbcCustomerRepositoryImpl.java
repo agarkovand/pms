@@ -28,18 +28,18 @@ public class JdbcCustomerRepositoryImpl
 	/**
 	 * customer table
 	 */
-	private static final String TABLE = "customer";
-	private static final String ID = "id";
-	private static final String NAME = "name";
-	private static final String COUNTRY = "country";
-	private static final String CITY = "city";
+	private static final String CUSTOMER_TABLE = "customer";
+	private static final String ID_COLUMN = "id";
+	private static final String NAME_COLUMN = "name";
+	private static final String COUNTRY_COLUMN = "country";
+	private static final String CITY_COLUMN = "city";
 
 	/**
 	 * INSERT INTO customer (name,country,city) VALUES (?,?,?);
 	 */
 	private static final String insertSQL = String.format(
-			"INSERT INTO %s (%s, %s, %s) VALUES (?,?,?);", TABLE,
-			NAME, COUNTRY, CITY);
+			"INSERT INTO %s (%s, %s, %s) VALUES (?,?,?);",
+			CUSTOMER_TABLE, NAME_COLUMN, COUNTRY_COLUMN, CITY_COLUMN);
 
 	@Override
 	public Customer save(Customer customer) throws DAOException {
@@ -106,8 +106,9 @@ public class JdbcCustomerRepositoryImpl
 	 * UPDATE customer SET name=?, country=?, city=? WHERE id=?;
 	 */
 	private static final String updateSQL = String.format(
-			"UPDATE %s SET %s=?, %s=?, %s=? WHERE %s=?", TABLE, NAME,
-			COUNTRY, CITY, ID);
+			"UPDATE %s SET %s=?, %s=?, %s=? WHERE %s=?",
+			CUSTOMER_TABLE, NAME_COLUMN, COUNTRY_COLUMN, CITY_COLUMN,
+			ID_COLUMN);
 
 	@Override
 	public int update(Customer customer) throws DAOException {
@@ -142,8 +143,8 @@ public class JdbcCustomerRepositoryImpl
 	/**
 	 * DELETE FROM customer WHERE id=?;
 	 */
-	private static final String deleteSQL = String
-			.format("DELETE FROM %s WHERE %s=?", TABLE, ID);
+	private static final String deleteSQL = String.format(
+			"DELETE FROM %s WHERE %s=?", CUSTOMER_TABLE, ID_COLUMN);
 
 	@Override
 	public int delete(Customer customer) throws DAOException {
@@ -160,9 +161,6 @@ public class JdbcCustomerRepositoryImpl
 		try (PreparedStatement statement = conn
 				.prepareStatement(deleteSQL);) {
 
-			// Delete projects for this customer
-			deleteProjects(customer);
-
 			statement.setLong(1, customer.getId());
 
 			count = statement.executeUpdate();
@@ -170,30 +168,24 @@ public class JdbcCustomerRepositoryImpl
 		} catch (SQLException ex) {
 			throw new DAOException("Error deleting customer with id: "
 					+ customer.getId(), ex);
-		} catch (DAOException ex) {
-			throw new DAOException(
-					"Error deleting projects for customer_id: "
-							+ customer.getId(),
-					ex);
 		}
 
 		return count;
 	}
 
-	protected void deleteProjects(Customer customer)
-			throws DAOException {
-
-		JdbcProjectRepositoryImpl dao = new JdbcProjectRepositoryImpl();
-		dao.set(conn);
-		long customer_id = customer.getId();
-
-		dao.deleteByParent(customer_id);
-
-	}
+	/**
+	 * SELECT * FROM customer WHERE id = ?;
+	 * 
+	 * SELECT * FROM %s WHERE %s = ?;
+	 */
+	private static final String findByIdSQL = String.format(
+			"SELECT * FROM %s WHERE %s = ?", CUSTOMER_TABLE,
+			ID_COLUMN);
 
 	@Override
 	public Customer getById(long id) {
-		// TODO Auto-generated method stub
+
+		System.out.println(findByIdSQL);
 		return null;
 	}
 
