@@ -89,10 +89,11 @@ public class JdbcCustomerRepositoryImplTest {
 				.performTest(new CustomerGetAllTestAction());
 
 		List<Customer> customers = ((result.length == 0) ? null
-				: (List) result[0]);
+				: (List<Customer>) result[0]);
 
 		assertNotNull(customers);
 		assertTrue(customers.size() > 0);
+		System.out.println(customers);
 
 	}
 

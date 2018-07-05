@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Customer;
@@ -193,7 +194,7 @@ public class JdbcCustomerRepositoryImpl
 				.prepareStatement(findByIdSQL);) {
 
 			ps.setLong(1, id);
-			ps.executeUpdate();
+			ps.executeQuery();
 
 			ResultSet rs = ps.getResultSet();
 			rs.next();
@@ -212,10 +213,43 @@ public class JdbcCustomerRepositoryImpl
 		return customer;
 	}
 
+	/**
+	 * SELECT * FROM customer;
+	 * 
+	 * SELECT * FROM %s;
+	 */
+
+	private static final String findAllSQL = String
+			.format("SELECT * FROM %s", CUSTOMER_TABLE);
+
 	@Override
-	public List<Customer> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Customer> getAll() throws DAOException {
+
+		List<Customer> customers = new ArrayList<>();
+
+		try (PreparedStatement ps = conn
+				.prepareStatement(findAllSQL);) {
+
+			ps.executeQuery();
+
+			ResultSet rs = ps.getResultSet();
+
+			while (rs.next()) {
+				Customer customer = new Customer();
+				customer.setId(rs.getLong(ID_COLUMN));
+				customer.setName(rs.getString(NAME_COLUMN));
+				customer.setCountry(rs.getString(COUNTRY_COLUMN));
+				customer.setCity(rs.getString(CITY_COLUMN));
+
+				customers.add(customer);
+			}
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+			throw new DAOException("Error finding all customers", ex);
+		}
+
+		return customers;
 	}
 
 }

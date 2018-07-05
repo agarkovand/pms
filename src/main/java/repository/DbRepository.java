@@ -15,5 +15,5 @@ public interface DbRepository<T> {
 
 	public T getById(long id) throws DAOException;
 
-	public List<T> getAll();
+	public List<T> getAll() throws DAOException;
 }
