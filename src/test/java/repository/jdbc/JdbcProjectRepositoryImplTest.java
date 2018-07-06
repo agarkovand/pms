@@ -13,6 +13,7 @@ import org.junit.Test;
 import model.Project;
 import repository.jdbc.util.JdbcRepositoryTestUtil;
 import repository.jdbc.util.impl.ProjectDeleteByParentTestAction;
+import repository.jdbc.util.impl.ProjectDeleteTestAction;
 import repository.jdbc.util.impl.ProjectUpdateTestAction;
 
 public class JdbcProjectRepositoryImplTest {
@@ -60,7 +61,17 @@ public class JdbcProjectRepositoryImplTest {
 	}
 
 	@Test
-	public void testGetById() {
+	public void testDelete() throws SQLException {
+		Object[] result = new JdbcRepositoryTestUtil().performTest(
+				new ProjectDeleteTestAction(existingProject));
+
+		int rowsAffected = (result.length == 0) ? 0 : (int) result[0];
+
+		assertEquals(1, rowsAffected);
+	}
+
+	@Test
+	public void testGetById() throws SQLException {
 		fail("Not yet implemented");
 	}
 
