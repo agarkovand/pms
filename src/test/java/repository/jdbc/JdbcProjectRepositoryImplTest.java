@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import model.Project;
 import repository.jdbc.util.JdbcRepositoryTestUtil;
 import repository.jdbc.util.impl.ProjectDeleteByParentTestAction;
 import repository.jdbc.util.impl.ProjectDeleteTestAction;
+import repository.jdbc.util.impl.ProjectGetAllTestAction;
 import repository.jdbc.util.impl.ProjectGetByIdTestAction;
 import repository.jdbc.util.impl.ProjectUpdateTestAction;
 
@@ -90,8 +92,19 @@ public class JdbcProjectRepositoryImplTest {
 	}
 
 	@Test
-	public void testGetAll() {
-		fail("Not yet implemented");
+	public void testGetAll() throws SQLException {
+
+		Object[] result = new JdbcRepositoryTestUtil()
+				.performTest(new ProjectGetAllTestAction());
+
+		List<Project> projects = ((result.length == 0) ? null
+				: (List<Project>) result[0]);
+
+		assertNotNull(projects);
+		assertTrue(projects.size() > 0);
+
+		System.out.println(projects);
+
 	}
 
 }
