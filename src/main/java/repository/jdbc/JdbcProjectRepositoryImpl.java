@@ -1,10 +1,12 @@
 package repository.jdbc;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.List;
 
 import model.Project;
@@ -52,8 +54,7 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 
 		if (id != null) {
 			throw new DAOException(
-					"Trying to persist existing customer: "
-							+ project);
+					"Trying to persist existing project: " + project);
 		}
 
 		/**
@@ -116,10 +117,58 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 		return count;
 	}
 
+	/**
+	 * UPDATE project SET title=?, project_start=?, planned_finish=?,
+	 * actual_finish=? WHERE id=?;
+	 * 
+	 * UPDATE %s SET %s=?, %s=?, %s=?, %s=? WHERE %s=?;
+	 */
+	private static final String updateSQL = String.format(
+			"UPDATE %s SET %s=?, %s=?, %s=?, %s=? WHERE %s=?",
+			PROJECT_TABLE, NAME_COLUMN, START_COLUMN,
+			PLAN_FINISH_COLUMN, ACTUAL_FINISH_COLUMN, ID_COLUMN);
+
 	@Override
-	public int update(Project t) throws DAOException {
-		// TODO Auto-generated method stub
-		return 0;
+	public int update(Project project) throws DAOException {
+
+		Long id = project.getId();
+
+		if (id == null) {
+			throw new DAOException(
+					"Trying to update new project: " + project);
+		}
+
+		int count = 0;
+
+		try (PreparedStatement ps = conn
+				.prepareStatement(updateSQL);) {
+
+			LocalDate projectStart = project.getProject_start();
+			LocalDate plannedFinish = project.getPlanned_finish();
+			LocalDate actualFinish = project.getActual_finish();
+
+			ps.setString(1, project.getName());
+
+			ps.setDate(2, projectStart == null ? null
+					: Date.valueOf(projectStart));
+
+			ps.setDate(3, plannedFinish == null ? null
+					: Date.valueOf(plannedFinish));
+
+			ps.setDate(4, actualFinish == null ? null
+					: Date.valueOf(actualFinish));
+
+			ps.setLong(5, project.getId());
+
+			count = ps.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+			throw new DAOException(
+					"Error updating project: " + project, ex);
+		}
+
+		return count;
 	}
 
 	@Override
