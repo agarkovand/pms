@@ -44,7 +44,8 @@ public class Project extends NamedEntity {
 	public String toString() {
 		return "[Project: " + super.toString() + ", project_start="
 				+ project_start + ", planned_finish=" + planned_finish
-				+ ", actual_finish=" + actual_finish + "]";
+				+ ", actual_finish=" + actual_finish + "]"
+				+ System.lineSeparator();
 	}
 
 }

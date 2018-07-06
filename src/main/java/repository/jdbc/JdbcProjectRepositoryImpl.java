@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Project;
@@ -215,7 +216,7 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 	 */
 
 	private static final String getByIdSQL = String.format(
-			"SELECT * FROM %s WHERE %s=?;", PROJECT_TABLE, ID_COLUMN);
+			"SELECT * FROM %s WHERE %s=?", PROJECT_TABLE, ID_COLUMN);
 
 	@Override
 	public Project getById(long id) throws DAOException {
@@ -261,10 +262,54 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 		return project;
 	}
 
+	/**
+	 * SELECT * FROM project;
+	 * 
+	 * SELECT * FROM %s;
+	 */
+
+	private static final String getAllSQL = String
+			.format("SELECT * FROM %s", PROJECT_TABLE);
+
 	@Override
-	public List<Project> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Project> getAll() throws DAOException {
+
+		List<Project> projects = new ArrayList<>();
+
+		try (PreparedStatement ps = conn
+				.prepareStatement(getAllSQL);) {
+
+			ps.executeQuery();
+
+			ResultSet rs = ps.getResultSet();
+
+			while (rs.next()) {
+
+				long id = rs.getLong(ID_COLUMN);
+
+				String name = rs.getString(NAME_COLUMN);
+				Date projectStart = rs.getDate(START_COLUMN);
+				Date plannedFinish = rs.getDate(PLAN_FINISH_COLUMN);
+				Date actualFinish = rs.getDate(ACTUAL_FINISH_COLUMN);
+
+				Project project = new Project(name,
+						projectStart == null ? null
+								: projectStart.toLocalDate(),
+						plannedFinish == null ? null
+								: plannedFinish.toLocalDate(),
+						actualFinish == null ? null
+								: actualFinish.toLocalDate());
+				project.setId(id);
+
+				projects.add(project);
+			}
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+			throw new DAOException("Error getting all projects", ex);
+		}
+
+		return projects;
 	}
 
 }
