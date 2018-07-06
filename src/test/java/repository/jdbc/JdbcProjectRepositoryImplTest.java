@@ -1,5 +1,6 @@
 package repository.jdbc;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -12,6 +13,7 @@ import org.junit.Test;
 import model.Project;
 import repository.jdbc.util.JdbcRepositoryTestUtil;
 import repository.jdbc.util.impl.ProjectDeleteByParentTestAction;
+import repository.jdbc.util.impl.ProjectUpdateTestAction;
 
 public class JdbcProjectRepositoryImplTest {
 
@@ -33,8 +35,14 @@ public class JdbcProjectRepositoryImplTest {
 	}
 
 	@Test
-	public void testUpdate() {
-		fail("Not yet implemented");
+	public void testUpdate() throws SQLException {
+
+		Object[] result = new JdbcRepositoryTestUtil().performTest(
+				new ProjectUpdateTestAction(existingProject));
+
+		int rowsAffected = (result.length == 0) ? 0 : (int) result[0];
+
+		assertEquals(1, rowsAffected);
 	}
 
 	@Test

@@ -84,7 +84,6 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 	}
 
 	/**
-	 * 
 	 * DELETE FROM project WHERE customer_id=?;
 	 * 
 	 * DELETE FROM %s WHERE %s=?;
@@ -111,8 +110,7 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 			throw new DAOException("Error deleting projects for "
-					+ CUSTOMER_ID_COLUMN + ": " + strongEntityId,
-					ex);
+					+ CUSTOMER_ID_COLUMN + ": " + strongEntityId, ex);
 		}
 
 		return count;
