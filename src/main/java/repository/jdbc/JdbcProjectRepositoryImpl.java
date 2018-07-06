@@ -158,7 +158,7 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 			ps.setDate(4, actualFinish == null ? null
 					: Date.valueOf(actualFinish));
 
-			ps.setLong(5, project.getId());
+			ps.setLong(5, id);
 
 			count = ps.executeUpdate();
 
@@ -171,10 +171,41 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 		return count;
 	}
 
+	/**
+	 * DELETE FROM project WHERE id=?;
+	 * 
+	 * DELETE FROM %s WHERE %s=?;
+	 */
+
+	private static final String deleteSQL = String.format(
+			"DELETE FROM %s WHERE %s=?", PROJECT_TABLE, ID_COLUMN);
+
 	@Override
-	public int delete(Project project) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int delete(Project project) throws DAOException {
+
+		Long id = project.getId();
+
+		if (id == null) {
+			throw new DAOException(
+					"Trying to delete new project: " + project);
+		}
+
+		int count = 0;
+
+		try (PreparedStatement ps = conn
+				.prepareStatement(deleteSQL);) {
+
+			ps.setLong(1, id);
+
+			count = ps.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+			throw new DAOException(
+					"Error deleting project: " + project, ex);
+		}
+
+		return count;
 	}
 
 	@Override

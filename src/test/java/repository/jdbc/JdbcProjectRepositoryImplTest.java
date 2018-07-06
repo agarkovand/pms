@@ -62,6 +62,7 @@ public class JdbcProjectRepositoryImplTest {
 
 	@Test
 	public void testDelete() throws SQLException {
+
 		Object[] result = new JdbcRepositoryTestUtil().performTest(
 				new ProjectDeleteTestAction(existingProject));
 
