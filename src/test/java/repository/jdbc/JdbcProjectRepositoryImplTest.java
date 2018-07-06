@@ -86,6 +86,7 @@ public class JdbcProjectRepositoryImplTest {
 
 		assertNotNull(project);
 		assertEquals("Pr1", project.getName());
+
 	}
 
 	@Test

@@ -208,10 +208,57 @@ public class JdbcProjectRepositoryImpl implements ProjectRepository {
 		return count;
 	}
 
+	/**
+	 * SELECT * FROM project WHERE id=?;
+	 * 
+	 * SELECT * FROM %s WHERE %s=?;
+	 */
+
+	private static final String getByIdSQL = String.format(
+			"SELECT * FROM %s WHERE %s=?;", PROJECT_TABLE, ID_COLUMN);
+
 	@Override
-	public Project getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Project getById(long id) throws DAOException {
+
+		if (id == 0) {
+			throw new DAOException(
+					"Trying to get nonexistent project.");
+		}
+
+		Project project = null;
+
+		try (PreparedStatement ps = conn
+				.prepareStatement(getByIdSQL);) {
+
+			ps.setLong(1, id);
+
+			ps.executeQuery();
+
+			ResultSet rs = ps.getResultSet();
+			rs.next();
+
+			String name = rs.getString(NAME_COLUMN);
+			Date projectStart = rs.getDate(START_COLUMN);
+			Date plannedFinish = rs.getDate(PLAN_FINISH_COLUMN);
+			Date actualFinish = rs.getDate(ACTUAL_FINISH_COLUMN);
+
+			project = new Project(name,
+					projectStart == null ? null
+							: projectStart.toLocalDate(),
+					plannedFinish == null ? null
+							: plannedFinish.toLocalDate(),
+					actualFinish == null ? null
+							: actualFinish.toLocalDate());
+
+			project.setId(id);
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+			throw new DAOException(
+					"Error deleting project: " + project, ex);
+		}
+
+		return project;
 	}
 
 	@Override

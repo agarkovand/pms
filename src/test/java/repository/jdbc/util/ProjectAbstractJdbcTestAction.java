@@ -7,8 +7,8 @@ public abstract class ProjectAbstractJdbcTestAction
 		implements AbstractJdbcTestAction {
 
 	protected Project project;
-	protected Long projectId;
-	protected Long customerId;
+	protected long projectId;
+	protected long customerId;
 	protected JdbcProjectRepositoryImpl dao = new JdbcProjectRepositoryImpl();
 
 }
