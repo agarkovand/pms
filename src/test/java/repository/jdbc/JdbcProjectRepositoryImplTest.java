@@ -1,6 +1,7 @@
 package repository.jdbc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -14,12 +15,14 @@ import model.Project;
 import repository.jdbc.util.JdbcRepositoryTestUtil;
 import repository.jdbc.util.impl.ProjectDeleteByParentTestAction;
 import repository.jdbc.util.impl.ProjectDeleteTestAction;
+import repository.jdbc.util.impl.ProjectGetByIdTestAction;
 import repository.jdbc.util.impl.ProjectUpdateTestAction;
 
 public class JdbcProjectRepositoryImplTest {
 
 	Project existingProject;
-	long customer_id;
+	long projectId;
+	long customerId;
 
 	@Before
 	public void setUp() {
@@ -27,7 +30,8 @@ public class JdbcProjectRepositoryImplTest {
 				LocalDate.parse("2016-01-01"),
 				LocalDate.parse("2020-12-31"), null);
 		existingProject.setId(1L);
-		customer_id = 1L;
+		projectId = 1L;
+		customerId = 1L;
 	}
 
 	@Test
@@ -50,7 +54,7 @@ public class JdbcProjectRepositoryImplTest {
 	public void testDeleteByParent() throws SQLException {
 
 		Object[] result = new JdbcRepositoryTestUtil().performTest(
-				new ProjectDeleteByParentTestAction(customer_id));
+				new ProjectDeleteByParentTestAction(customerId));
 
 		int rowsAffected = (result.length == 0) ? 0 : (int) result[0];
 
@@ -73,7 +77,15 @@ public class JdbcProjectRepositoryImplTest {
 
 	@Test
 	public void testGetById() throws SQLException {
-		fail("Not yet implemented");
+
+		Object[] result = new JdbcRepositoryTestUtil()
+				.performTest(new ProjectGetByIdTestAction(projectId));
+
+		Project project = (result.length == 0) ? null
+				: (Project) result[0];
+
+		assertNotNull(project);
+		assertEquals("Pr1", project.getName());
 	}
 
 	@Test

@@ -2,22 +2,23 @@ package repository.jdbc.util.impl;
 
 import java.sql.Connection;
 
+import model.Project;
 import repository.exception.DAOException;
 import repository.jdbc.util.ProjectAbstractJdbcTestAction;
 
-public class ProjectDeleteByParentTestAction
+public class ProjectGetByIdTestAction
 		extends ProjectAbstractJdbcTestAction {
 
-	public ProjectDeleteByParentTestAction(Long customer_id) {
-		this.customerId = customer_id;
+	public ProjectGetByIdTestAction(long projectId) {
+		this.projectId = projectId;
 	}
 
 	@Override
 	public Object[] perform(Connection conn) throws DAOException {
 
 		dao.set(conn);
-		int affectedRowsCount = dao.deleteByParent(customerId);
-		return new Object[] { affectedRowsCount };
+		Project project = dao.getById(projectId);
+		return new Object[] { project };
 	}
 
 }
