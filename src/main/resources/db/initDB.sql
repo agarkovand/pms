@@ -1,16 +1,6 @@
-DROP TABLE it_company_project;
-DROP TABLE project_developer;
-DROP TABLE developer_skill;
-DROP TABLE developer_it_company;
-DROP TABLE project;
-DROP TABLE it_company;
-DROP TABLE customer;
-DROP TABLE skill;
-DROP TABLE developer;
-
 --  it_company
 
-CREATE TABLE it_company
+CREATE TABLE IF NOT EXISTS it_company
 (
  id           INT NOT NULL AUTO_INCREMENT,
  name         VARCHAR(45) NOT NULL,
@@ -24,7 +14,7 @@ PRIMARY KEY (id)
 
 --  customer
 
-CREATE TABLE customer
+CREATE TABLE IF NOT EXISTS customer
 (
  id      INT NOT NULL AUTO_INCREMENT,
  name    VARCHAR(45) NOT NULL,
@@ -36,7 +26,7 @@ PRIMARY KEY (id)
 
 --  skill
 
-CREATE TABLE skill
+CREATE TABLE IF NOT EXISTS skill
 (
  id                INT NOT NULL AUTO_INCREMENT,
  area_of_expertise VARCHAR(45) NOT NULL,
@@ -47,7 +37,7 @@ PRIMARY KEY (id)
 
 --  developer
 
-CREATE TABLE developer
+CREATE TABLE IF NOT EXISTS developer
 (
  id             INT NOT NULL AUTO_INCREMENT,
  first_name     VARCHAR(45) NOT NULL,
@@ -63,7 +53,7 @@ PRIMARY KEY (id)
 
 --  developer_skill
 
-CREATE TABLE developer_skill
+CREATE TABLE IF NOT EXISTS developer_skill
 (
  skill_id       INT NOT NULL,
  developer_id   INT NOT NULL,
@@ -76,7 +66,7 @@ FOREIGN KEY dev_skill_dev_id_fk (developer_id) REFERENCES developer (id)
 
 --  developer_it_company
 
-CREATE TABLE developer_it_company
+CREATE TABLE IF NOT EXISTS developer_it_company
 (
  developer_id   INT NOT NULL,
  it_company_id  INT NOT NULL,
@@ -91,7 +81,7 @@ FOREIGN KEY dev_it_comp_comp_id_fk (it_company_id) REFERENCES it_company (id)
 
 --  project
 
-CREATE TABLE project
+CREATE TABLE IF NOT EXISTS project
 (
  id             INT NOT NULL AUTO_INCREMENT,
  customer_id    INT NOT NULL,
@@ -104,9 +94,14 @@ PRIMARY KEY (id),
 FOREIGN KEY project_cust_id_fk (customer_id) REFERENCES customer (id)
 );
 
+ALTER TABLE project DROP FOREIGN KEY project_cust_id_fk;
+
+ALTER TABLE project ADD CONSTRAINT project_cust_id_fk
+ FOREIGN KEY (customer_id) REFERENCES customer (id) ON DELETE CASCADE;
+
 --  it_company_project
 
-CREATE TABLE it_company_project
+CREATE TABLE IF NOT EXISTS it_company_project
 (
  project_id     INT NOT NULL,
  it_company_id  INT NOT NULL,
@@ -119,9 +114,14 @@ FOREIGN KEY it_comp_pr_pr_id_fk (project_id) REFERENCES project (id),
 FOREIGN KEY it_comp_pr_it_comp_id_fk (it_company_id) REFERENCES it_company (id)
 );
 
+ALTER TABLE it_company_project DROP FOREIGN KEY it_comp_pr_pr_id_fk;
+
+ALTER TABLE it_company_project ADD CONSTRAINT it_comp_pr_pr_id_fk 
+ FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE;
+
 --  project_developer
 
-CREATE TABLE project_developer
+CREATE TABLE IF NOT EXISTS project_developer
 (
  project_id     INT NOT NULL,
  developer_id   INT NOT NULL,
@@ -133,3 +133,9 @@ PRIMARY KEY (project_id, developer_id,  start_date),
 FOREIGN KEY pr_dev_pr_id (project_id) REFERENCES project (id),
 FOREIGN KEY pr_dev_dev_id (developer_id) REFERENCES developer (id)
 );
+
+ALTER TABLE project_developer DROP FOREIGN KEY pr_dev_pr_id;
+
+ALTER TABLE project_developer ADD CONSTRAINT pr_dev_pr_id
+ FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE;
+

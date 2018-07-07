@@ -10,8 +10,11 @@
  
 # Mac
 .DS_Store
+
+# Arch Linux
+/**/.directory
  
 # Maven
 log/
 target/
-/.directory
+/*.log
