@@ -1,15 +1,15 @@
-package repository.jdbc.util.impl;
+package repository.jdbc.util.actions.impl;
 
 import java.sql.Connection;
 
 import model.Project;
 import repository.exception.DAOException;
-import repository.jdbc.util.ProjectAbstractJdbcTestAction;
+import repository.jdbc.util.actions.ProjectAction;
 
-public class ProjectDeleteTestAction
-		extends ProjectAbstractJdbcTestAction {
+public class ProjectDeleteAction
+		extends ProjectAction {
 
-	public ProjectDeleteTestAction(Project existingProject) {
+	public ProjectDeleteAction(Project existingProject) {
 
 		this.project = existingProject;
 	}

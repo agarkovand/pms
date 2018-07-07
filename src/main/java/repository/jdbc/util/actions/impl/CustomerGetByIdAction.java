@@ -1,21 +1,19 @@
-package repository.jdbc.util.impl;
+package repository.jdbc.util.actions.impl;
 
 import java.sql.Connection;
 
 import model.Customer;
 import repository.exception.DAOException;
-import repository.jdbc.util.CustomerAbstractJdbcTestAction;
+import repository.jdbc.util.actions.CustomerAction;
 
-public class CustomerGetByIdTestAction
-		extends CustomerAbstractJdbcTestAction {
+public class CustomerGetByIdAction extends CustomerAction {
 
-	public CustomerGetByIdTestAction(long existingCustomerId) {
-		this.customerId = existingCustomerId;
+	public CustomerGetByIdAction(long id) {
+		this.customerId = id;
 	}
 
 	@Override
 	public Object[] perform(Connection conn) throws DAOException {
-
 		dao.set(conn);
 		Customer customer = dao.getById(customerId);
 		return new Object[] { customer };

@@ -1,15 +1,15 @@
-package repository.jdbc.util.impl;
+package repository.jdbc.util.actions.impl;
 
 import java.sql.Connection;
 
 import model.Project;
 import repository.exception.DAOException;
-import repository.jdbc.util.ProjectAbstractJdbcTestAction;
+import repository.jdbc.util.actions.ProjectAction;
 
-public class ProjectGetByIdTestAction
-		extends ProjectAbstractJdbcTestAction {
+public class ProjectGetByIdAction
+		extends ProjectAction {
 
-	public ProjectGetByIdTestAction(long projectId) {
+	public ProjectGetByIdAction(long projectId) {
 		this.projectId = projectId;
 	}
 

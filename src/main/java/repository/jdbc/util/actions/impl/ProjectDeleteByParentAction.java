@@ -1,14 +1,13 @@
-package repository.jdbc.util.impl;
+package repository.jdbc.util.actions.impl;
 
 import java.sql.Connection;
 
 import repository.exception.DAOException;
-import repository.jdbc.util.ProjectAbstractJdbcTestAction;
+import repository.jdbc.util.actions.ProjectAction;
 
-public class ProjectDeleteByParentTestAction
-		extends ProjectAbstractJdbcTestAction {
+public class ProjectDeleteByParentAction extends ProjectAction {
 
-	public ProjectDeleteByParentTestAction(Long customer_id) {
+	public ProjectDeleteByParentAction(Long customer_id) {
 		this.customerId = customer_id;
 	}
 

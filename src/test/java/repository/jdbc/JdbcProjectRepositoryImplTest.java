@@ -13,18 +13,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.Project;
-import repository.jdbc.util.JdbcRepositoryTestUtil;
-import repository.jdbc.util.impl.ProjectDeleteByParentTestAction;
-import repository.jdbc.util.impl.ProjectDeleteTestAction;
-import repository.jdbc.util.impl.ProjectGetAllTestAction;
-import repository.jdbc.util.impl.ProjectGetByIdTestAction;
-import repository.jdbc.util.impl.ProjectUpdateTestAction;
+import repository.jdbc.util.ContextExecution;
+import repository.jdbc.util.JdbcConnectionTestContextExecution;
+import repository.jdbc.util.actions.impl.ProjectDeleteAction;
+import repository.jdbc.util.actions.impl.ProjectDeleteByParentAction;
+import repository.jdbc.util.actions.impl.ProjectGetAllAction;
+import repository.jdbc.util.actions.impl.ProjectGetByIdAction;
+import repository.jdbc.util.actions.impl.ProjectUpdateAction;
 
 public class JdbcProjectRepositoryImplTest {
 
 	Project existingProject;
 	long projectId;
 	long customerId;
+
+	ContextExecution executionInstance;
 
 	@Before
 	public void setUp() {
@@ -34,6 +37,8 @@ public class JdbcProjectRepositoryImplTest {
 		existingProject.setId(1L);
 		projectId = 1L;
 		customerId = 1L;
+
+		executionInstance = new JdbcConnectionTestContextExecution();
 	}
 
 	@Test
@@ -44,8 +49,8 @@ public class JdbcProjectRepositoryImplTest {
 	@Test
 	public void testUpdate() throws SQLException {
 
-		Object[] result = new JdbcRepositoryTestUtil().performTest(
-				new ProjectUpdateTestAction(existingProject));
+		Object[] result = executionInstance.performAction(
+				new ProjectUpdateAction(existingProject));
 
 		int rowsAffected = (result.length == 0) ? 0 : (int) result[0];
 
@@ -55,8 +60,8 @@ public class JdbcProjectRepositoryImplTest {
 	@Test
 	public void testDeleteByParent() throws SQLException {
 
-		Object[] result = new JdbcRepositoryTestUtil().performTest(
-				new ProjectDeleteByParentTestAction(customerId));
+		Object[] result = executionInstance.performAction(
+				new ProjectDeleteByParentAction(customerId));
 
 		int rowsAffected = (result.length == 0) ? 0 : (int) result[0];
 
@@ -69,8 +74,8 @@ public class JdbcProjectRepositoryImplTest {
 	@Test
 	public void testDelete() throws SQLException {
 
-		Object[] result = new JdbcRepositoryTestUtil().performTest(
-				new ProjectDeleteTestAction(existingProject));
+		Object[] result = executionInstance.performAction(
+				new ProjectDeleteAction(existingProject));
 
 		int rowsAffected = (result.length == 0) ? 0 : (int) result[0];
 
@@ -80,8 +85,8 @@ public class JdbcProjectRepositoryImplTest {
 	@Test
 	public void testGetById() throws SQLException {
 
-		Object[] result = new JdbcRepositoryTestUtil()
-				.performTest(new ProjectGetByIdTestAction(projectId));
+		Object[] result = executionInstance
+				.performAction(new ProjectGetByIdAction(projectId));
 
 		Project project = (result.length == 0) ? null
 				: (Project) result[0];
@@ -94,8 +99,8 @@ public class JdbcProjectRepositoryImplTest {
 	@Test
 	public void testGetAll() throws SQLException {
 
-		Object[] result = new JdbcRepositoryTestUtil()
-				.performTest(new ProjectGetAllTestAction());
+		Object[] result = executionInstance
+				.performAction(new ProjectGetAllAction());
 
 		List<Project> projects = ((result.length == 0) ? null
 				: (List<Project>) result[0]);

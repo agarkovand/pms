@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import repository.exception.DAOException;
 import util.drm.ConnectionUtil;
 
-public class JdbcRepositoryTestUtil {
+public class JdbcConnectionContextExecution
+		implements ContextExecution {
 
-	public Object[] performTest(AbstractJdbcTestAction action)
+	@Override
+	public Object[] performAction(JdbcAction action)
 			throws SQLException {
 
 		Object[] result = null;
@@ -16,14 +18,16 @@ public class JdbcRepositoryTestUtil {
 		try (Connection conn = ConnectionUtil.getConnection();) {
 
 			try {
-				conn.setAutoCommit(false);
+
+				System.out.println(
+						"AutoCommit: " + conn.getAutoCommit());
 
 				result = action.perform(conn);
 
-				ConnectionUtil.clearConnection(conn, null);
+				conn.commit();
 
 			} catch (SQLException | DAOException ex) {
-				ConnectionUtil.clearConnection(conn, ex);
+				conn.rollback();
 			}
 
 		} catch (DAOException ex) {
@@ -32,4 +36,5 @@ public class JdbcRepositoryTestUtil {
 
 		return (result == null) ? new Object[0] : result;
 	}
+
 }

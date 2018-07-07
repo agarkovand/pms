@@ -1,15 +1,14 @@
-package repository.jdbc.util.impl;
+package repository.jdbc.util.actions.impl;
 
 import java.sql.Connection;
 
 import model.Customer;
 import repository.exception.DAOException;
-import repository.jdbc.util.CustomerAbstractJdbcTestAction;
+import repository.jdbc.util.actions.CustomerAction;
 
-public class CustomerSaveTestAction
-		extends CustomerAbstractJdbcTestAction {
+public class CustomerSaveAction extends CustomerAction {
 
-	public CustomerSaveTestAction(Customer newCustomer) {
+	public CustomerSaveAction(Customer newCustomer) {
 		this.customer = newCustomer;
 	}
 

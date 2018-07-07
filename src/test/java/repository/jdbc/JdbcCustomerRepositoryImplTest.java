@@ -11,12 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import model.Customer;
-import repository.jdbc.util.JdbcRepositoryTestUtil;
-import repository.jdbc.util.impl.CustomerDeleteTestAction;
-import repository.jdbc.util.impl.CustomerGetAllTestAction;
-import repository.jdbc.util.impl.CustomerGetByIdTestAction;
-import repository.jdbc.util.impl.CustomerSaveTestAction;
-import repository.jdbc.util.impl.CustomerUpdateTestAction;
+import repository.jdbc.util.JdbcConnectionTestContextExecution;
+import repository.jdbc.util.actions.impl.CustomerDeleteAction;
+import repository.jdbc.util.actions.impl.CustomerGetAllAction;
+import repository.jdbc.util.actions.impl.CustomerGetByIdAction;
+import repository.jdbc.util.actions.impl.CustomerSaveAction;
+import repository.jdbc.util.actions.impl.CustomerUpdateAction;
 
 public class JdbcCustomerRepositoryImplTest {
 
@@ -35,8 +35,8 @@ public class JdbcCustomerRepositoryImplTest {
 	@Test
 	public void testSave() throws SQLException {
 
-		new JdbcRepositoryTestUtil()
-				.performTest(new CustomerSaveTestAction(newCustomer));
+		new JdbcConnectionTestContextExecution()
+				.performAction(new CustomerSaveAction(newCustomer));
 
 		assertNotNull(newCustomer.getId());
 	}
@@ -44,8 +44,9 @@ public class JdbcCustomerRepositoryImplTest {
 	@Test
 	public void testUpdate() throws SQLException {
 
-		Object[] result = new JdbcRepositoryTestUtil().performTest(
-				new CustomerUpdateTestAction(existingCustomer));
+		Object[] result = new JdbcConnectionTestContextExecution()
+				.performAction(new CustomerUpdateAction(
+						existingCustomer));
 
 		int rowsAffected = (result.length == 0) ? 0 : (int) result[0];
 
@@ -55,8 +56,9 @@ public class JdbcCustomerRepositoryImplTest {
 	@Test
 	public void testDelete() throws SQLException {
 
-		Object[] result = new JdbcRepositoryTestUtil().performTest(
-				new CustomerDeleteTestAction(existingCustomer));
+		Object[] result = new JdbcConnectionTestContextExecution()
+				.performAction(new CustomerDeleteAction(
+						existingCustomer));
 
 		int rowsAffected = (result.length == 0) ? 0 : (int) result[0];
 
@@ -68,8 +70,9 @@ public class JdbcCustomerRepositoryImplTest {
 	@Test
 	public void testGetById() throws SQLException {
 
-		Object[] result = new JdbcRepositoryTestUtil().performTest(
-				new CustomerGetByIdTestAction(existingCustomerId));
+		Object[] result = new JdbcConnectionTestContextExecution()
+				.performAction(new CustomerGetByIdAction(
+						existingCustomerId));
 
 		Customer customer = ((result.length == 0) ? null
 				: (Customer) result[0]);
@@ -85,8 +88,8 @@ public class JdbcCustomerRepositoryImplTest {
 	@Test
 	public void testGetAll() throws SQLException {
 
-		Object[] result = new JdbcRepositoryTestUtil()
-				.performTest(new CustomerGetAllTestAction());
+		Object[] result = new JdbcConnectionTestContextExecution()
+				.performAction(new CustomerGetAllAction());
 
 		List<Customer> customers = ((result.length == 0) ? null
 				: (List<Customer>) result[0]);

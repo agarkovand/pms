@@ -4,8 +4,8 @@ import java.sql.Connection;
 
 import repository.exception.DAOException;
 
-public interface AbstractJdbcTestAction {
+public interface JdbcAction {
 
-	public Object[] perform(Connection conn) throws DAOException;
+	Object[] perform(Connection conn) throws DAOException;
 
 }

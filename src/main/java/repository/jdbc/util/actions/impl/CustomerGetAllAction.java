@@ -1,14 +1,13 @@
-package repository.jdbc.util.impl;
+package repository.jdbc.util.actions.impl;
 
 import java.sql.Connection;
 import java.util.List;
 
 import model.Customer;
 import repository.exception.DAOException;
-import repository.jdbc.util.CustomerAbstractJdbcTestAction;
+import repository.jdbc.util.actions.CustomerAction;
 
-public class CustomerGetAllTestAction
-		extends CustomerAbstractJdbcTestAction {
+public class CustomerGetAllAction extends CustomerAction {
 
 	@Override
 	public Object[] perform(Connection conn) throws DAOException {

@@ -40,12 +40,14 @@ public class ConnectionUtil {
 			System.out.println(ex.getMessage());
 		}
 
-		urlString = String.format("%s?user=%s&password=%s", url, user, passw);
+		urlString = String.format("%s?user=%s&password=%s", url, user,
+				passw);
 
 		System.out.println(urlString);
 	}
 
-	public static synchronized Connection getConnection() throws DAOException {
+	public static synchronized Connection getConnection()
+			throws DAOException {
 
 		try {
 			return DriverManager.getConnection(urlString);
@@ -64,8 +66,8 @@ public class ConnectionUtil {
 		}
 	}
 
-	private static String getProperty(String property, Properties props)
-			throws DAOException {
+	private static String getProperty(String property,
+			Properties props) throws DAOException {
 
 		String value = props.getProperty(property);
 
@@ -80,7 +82,8 @@ public class ConnectionUtil {
 		return value;
 	}
 
-	protected static Properties getPropertiesFromFile() throws DAOException {
+	protected static Properties getPropertiesFromFile()
+			throws DAOException {
 
 		Properties props = new Properties();
 		InputStream propStreamFromFile = ConnectionUtil.class
@@ -89,8 +92,9 @@ public class ConnectionUtil {
 		try {
 
 			if (propStreamFromFile == null) {
-				throw new IOException("Property file " + PROP_FILE_NAME
-						+ " not found in the classpath.");
+				throw new IOException(
+						"Property file " + PROP_FILE_NAME
+								+ " not found in the classpath.");
 			}
 
 			props.load(propStreamFromFile);

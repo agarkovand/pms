@@ -1,14 +1,14 @@
-package repository.jdbc.util.impl;
+package repository.jdbc.util.actions.impl;
 
 import java.sql.Connection;
 import java.util.List;
 
 import model.Project;
 import repository.exception.DAOException;
-import repository.jdbc.util.ProjectAbstractJdbcTestAction;
+import repository.jdbc.util.actions.ProjectAction;
 
-public class ProjectGetAllTestAction
-		extends ProjectAbstractJdbcTestAction {
+public class ProjectGetAllAction
+		extends ProjectAction {
 
 	@Override
 	public Object[] perform(Connection conn) throws DAOException {

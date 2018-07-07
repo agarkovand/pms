@@ -7,20 +7,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import app.exception.ApplicationException;
 import app.parsers.AbstractEntityParser;
-import app.parsers.CustomerParser;
 import app.parsers.ProjectParser;
 import model.Customer;
 import model.Project;
 import repository.StrongEntityRepository;
 import repository.exception.DAOException;
-import repository.jdbc.JdbcCustomerRepositoryImpl;
+import service.CustomerService;
+import service.exception.ServiceException;
 import util.drm.ConnectionUtil;
 
 public class Application {
@@ -29,18 +28,22 @@ public class Application {
 	private static String projects_file = "/data/projects_to_add.csv";
 
 	public static void main(String[] args)
-			throws ApplicationException {
+			throws ApplicationException, ServiceException {
 
-		Map<Long, Customer> customers = collectEntitiesFromCsvFile(
-				customers_file, new CustomerParser());
+		System.out.println(new CustomerService().getById(20L));
+		System.out.println(new CustomerService().getAll());
 
-		populateCustomersWithProjectsFromCsvFile(customers,
-				projects_file);
-
-		System.out.println(customers);
-
-		saveEntitiesToDB(new ArrayList<Customer>(customers.values()),
-				new JdbcCustomerRepositoryImpl());
+		// Map<Long, Customer> customers = collectEntitiesFromCsvFile(
+		// customers_file, new CustomerParser());
+		//
+		// populateCustomersWithProjectsFromCsvFile(customers,
+		// projects_file);
+		//
+		// System.out.println(customers);
+		//
+		// saveEntitiesToDB(new
+		// ArrayList<Customer>(customers.values()),
+		// new JdbcCustomerRepositoryImpl());
 	}
 
 	private static void populateCustomersWithProjectsFromCsvFile(
