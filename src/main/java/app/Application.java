@@ -30,23 +30,23 @@ public class Application {
 	public static void main(String[] args)
 			throws ApplicationException, ServiceException {
 
-		System.out.println(new CustomerService().getById(20L));
+		System.out.println(new CustomerService().getById(2L));
 		System.out.println(new CustomerService().getAll());
 
-		// Map<Long, Customer> customers = collectEntitiesFromCsvFile(
-		// customers_file, new CustomerParser());
-		//
-		// populateCustomersWithProjectsFromCsvFile(customers,
-		// projects_file);
-		//
-		// System.out.println(customers);
-		//
-		// saveEntitiesToDB(new
-		// ArrayList<Customer>(customers.values()),
-		// new JdbcCustomerRepositoryImpl());
+		Customer customer = new Customer();
+		customer.setId(2L);
+		System.out.println(
+				"Deleting customer with id: " + customer.getId());
+
+		int rowsAffected = new CustomerService().delete(customer);
+
+		System.out.println(rowsAffected + " customer deleted.");
+
+		System.out.println(new CustomerService().getAll());
+
 	}
 
-	private static void populateCustomersWithProjectsFromCsvFile(
+	public static void populateCustomersWithProjectsFromCsvFile(
 			Map<Long, Customer> customers, String projects_file)
 			throws ApplicationException {
 
