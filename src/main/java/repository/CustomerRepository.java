@@ -1,8 +1,8 @@
 package repository;
 
-import model.Customer;
+import model.Project;
 
 public interface CustomerRepository
-		extends StrongEntityRepository<Customer> {
+		extends GenericRepository<Project> {
 
 }

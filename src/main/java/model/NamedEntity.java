@@ -1,14 +1,19 @@
 package model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class NamedEntity extends BaseEntity {
 
+	@Getter
+	@Setter
 	protected String name;
 
-	public String getName() {
-		return name;
+	public NamedEntity() {
+
 	}
 
-	public void setName(String name) {
+	public NamedEntity(String name) {
 		this.name = name;
 	}
 

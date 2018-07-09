@@ -3,19 +3,40 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Customer extends NamedEntity {
 
+	@Getter
+	@Setter
 	private String country;
+
+	@Getter
+	@Setter
 	private String city;
+
+	@Getter
+	@Setter
+	private String email;
+
+	@Getter
+	@Setter
+	private String phone;
+
 	private List<Project> projects = new ArrayList<>();
 
 	public Customer() {
 	}
 
-	public Customer(String name, String country, String city) {
-		this.name = name;
+	public Customer(String name, String country, String city,
+			String email, String phone, List<Project> projects) {
+		super(name);
 		this.country = country;
 		this.city = city;
+		this.email = email;
+		this.phone = phone;
+		this.projects = projects;
 	}
 
 	public void addProject(Project project) {
@@ -26,20 +47,11 @@ public class Customer extends NamedEntity {
 		return projects;
 	}
 
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
+	@Override
+	public String toString() {
+		return "[Customer: " + super.toString() + ", country="
+				+ country + ", city=" + city + "]"
+				+ System.lineSeparator() + getProjectsAsString();
 	}
 
 	public String getProjectsAsString() {
@@ -50,13 +62,6 @@ public class Customer extends NamedEntity {
 			sb.append(System.lineSeparator());
 		}
 		return sb.toString();
-	}
-
-	@Override
-	public String toString() {
-		return "[Customer: " + super.toString() + ", country=" + country
-				+ ", city=" + city + "]" + System.lineSeparator()
-				+ getProjectsAsString();
 	}
 
 }

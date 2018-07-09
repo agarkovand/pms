@@ -1,13 +1,12 @@
 package repository;
 
-import java.sql.Connection;
 import java.util.List;
 
 import repository.exception.DAOException;
 
-public interface DbRepository<T> {
+public interface GenericRepository<T> {
 
-	public void set(Connection conn);
+	public T save(T t) throws DAOException;
 
 	public int update(T t) throws DAOException;
 

@@ -40,17 +40,13 @@ public class ConnectionUtil {
 			System.out.println(ex.getMessage());
 		}
 
-		urlString = String.format("%s?user=%s&password=%s", url, user,
-				passw);
-
-		System.out.println(urlString);
 	}
 
 	public static synchronized Connection getConnection()
 			throws DAOException {
 
 		try {
-			return DriverManager.getConnection(urlString);
+			return DriverManager.getConnection(url, user, passw);
 		} catch (SQLException ex) {
 			throw new DAOException("Error getting connection", ex);
 		}

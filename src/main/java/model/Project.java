@@ -1,50 +1,44 @@
 package model;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class Project extends NamedEntity {
 
-	private LocalDate project_start;
-	private LocalDate planned_finish;
-	private LocalDate actual_finish;
+	@Getter
+	@Setter
+	private int customerId;
 
-	public Project(String name, LocalDate project_start,
-			LocalDate planned_finish, LocalDate actual_finish) {
-		this.name = name;
-		this.project_start = project_start;
-		this.planned_finish = planned_finish;
-		this.actual_finish = actual_finish;
-	}
+	@Getter
+	@Setter
+	private BigInteger totalBudget;
 
-	public LocalDate getProject_start() {
-		return project_start;
-	}
+	@Getter
+	@Setter
+	private LocalDate startDate;
 
-	public void setProject_start(LocalDate project_start) {
-		this.project_start = project_start;
-	}
+	@Getter
+	@Setter
+	private LocalDate deliveryDate;
 
-	public LocalDate getPlanned_finish() {
-		return planned_finish;
-	}
-
-	public void setPlanned_finish(LocalDate planned_finish) {
-		this.planned_finish = planned_finish;
-	}
-
-	public LocalDate getActual_finish() {
-		return actual_finish;
-	}
-
-	public void setActual_finish(LocalDate actual_finish) {
-		this.actual_finish = actual_finish;
+	public Project(String name, int customerId,
+			BigInteger totalBudget, LocalDate startDate,
+			LocalDate deliveryDate) {
+		super(name);
+		this.customerId = customerId;
+		this.totalBudget = totalBudget;
+		this.startDate = startDate;
+		this.deliveryDate = deliveryDate;
 	}
 
 	@Override
 	public String toString() {
-		return "[Project: " + super.toString() + ", project_start="
-				+ project_start + ", planned_finish=" + planned_finish
-				+ ", actual_finish=" + actual_finish + "]"
+		return "[Project: " + super.toString() + ", project_start: "
+				+ startDate + ", delivery_date: " + deliveryDate
+				+ ", total_budget =" + totalBudget + "]"
 				+ System.lineSeparator();
 	}
 
