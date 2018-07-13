@@ -10,9 +10,7 @@ CREATE TABLE IF NOT EXISTS customer
  country VARCHAR(100),
  zip_code VARCHAR(20),
  email VARCHAR(100),
- phone VARCHAR(20),
  
 PRIMARY KEY (customer_id),
-CONSTRAINT email UNIQUE (email),
-CONSTRAINT phone UNIQUE (phone)
+CONSTRAINT email UNIQUE (email)
 );

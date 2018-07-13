@@ -28,8 +28,8 @@ public class Application {
 
 		session.save(customer);
 		session.save(customer2);
-		transaction.commit();
 
+		transaction.commit();
 		sessionfactory.close();
 
 	}
@@ -48,7 +48,8 @@ public class Application {
 		Customer customer = new Customer();
 		customer.setName("Client1");
 		customer.setEmail("xxx@xxx.xxx");
-		customer.setPhone("777888999");
+		customer.getPhones().add("777888999");
+		customer.getPhones().add("666888999");
 		return customer;
 	}
 
@@ -56,7 +57,9 @@ public class Application {
 		Customer customer = new Customer();
 		customer.setName("Client1");
 		customer.setEmail("yyy@yyy.yyy");
-		customer.setPhone("888999000");
+		customer.getPhones().add("888999000");
+		customer.getPhones().add("777999000");
+		customer.getPhones().add("666999000");
 		return customer;
 	}
 

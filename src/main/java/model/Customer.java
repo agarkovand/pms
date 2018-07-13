@@ -1,11 +1,17 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -24,7 +30,10 @@ public class Customer {
 
 	private String email;
 
-	private String phone;
+	@ElementCollection
+	@CollectionTable(name = "customer_phone", joinColumns = @JoinColumn(name = "customer_id"))
+	@Column(name = "phone")
+	private List<String> phones = new ArrayList<>();
 
 	public Long getCustomerId() {
 		return customerId;
@@ -58,12 +67,12 @@ public class Customer {
 		this.email = email;
 	}
 
-	public String getPhone() {
-		return phone;
+	public List<String> getPhones() {
+		return phones;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setPhones(List<String> phones) {
+		this.phones = phones;
 	}
 
 }
