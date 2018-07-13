@@ -28,7 +28,9 @@ public class Customer {
 	@Embedded
 	private Address address;
 
-	private String email;
+	@ElementCollection
+	@CollectionTable(name = "customer_email", joinColumns = @JoinColumn(name = "customer_id"))
+	private List<Email> emails = new ArrayList<>();
 
 	@ElementCollection
 	@CollectionTable(name = "customer_phone", joinColumns = @JoinColumn(name = "customer_id"))
@@ -59,20 +61,12 @@ public class Customer {
 		this.address = address;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public List<Email> getEmails() {
+		return emails;
 	}
 
 	public List<String> getPhones() {
 		return phones;
-	}
-
-	public void setPhones(List<String> phones) {
-		this.phones = phones;
 	}
 
 }
