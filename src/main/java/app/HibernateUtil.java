@@ -1,8 +1,10 @@
 package app;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil {
 
@@ -11,14 +13,11 @@ public class HibernateUtil {
 	private static SessionFactory buildSessionFactory() {
 
 		try {
-			Configuration configuration = new Configuration()
-					.configure();
-
-			return configuration.buildSessionFactory(
-					new StandardServiceRegistryBuilder()
-							.applySettings(
-									configuration.getProperties())
-							.build());
+			StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
+					.configure("hibernate.cfg.xml").build();
+			Metadata metadata = new MetadataSources(standardRegistry)
+					.getMetadataBuilder().build();
+			return metadata.getSessionFactoryBuilder().build();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(
