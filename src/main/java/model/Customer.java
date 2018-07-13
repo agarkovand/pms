@@ -20,8 +20,8 @@ public class Customer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "customer_id")
-	private Long customerId;
+	@Column(name = "id")
+	private Long id;
 
 	private String name;
 
@@ -37,12 +37,12 @@ public class Customer {
 	@Column(name = "phone")
 	private List<String> phones = new ArrayList<>();
 
-	public Long getCustomerId() {
-		return customerId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
