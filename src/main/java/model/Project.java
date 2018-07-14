@@ -1,45 +1,73 @@
 package model;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class Project extends NamedEntity {
+@Entity
+@Table(name = "project")
+public class Project {
 
-	@Getter
-	@Setter
-	private int customerId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-	@Getter
-	@Setter
-	private BigInteger totalBudget;
+	@Column(name = "title")
+	private String name;
 
-	@Getter
-	@Setter
+	@Column(name = "total_budget")
+	private BigDecimal totalBudget;
+
+	@Column(name = "start_date")
 	private LocalDate startDate;
 
-	@Getter
-	@Setter
+	@Column(name = "delivery_date")
 	private LocalDate deliveryDate;
 
-	public Project(String name, int customerId,
-			BigInteger totalBudget, LocalDate startDate,
-			LocalDate deliveryDate) {
-		super(name);
-		this.customerId = customerId;
-		this.totalBudget = totalBudget;
-		this.startDate = startDate;
-		this.deliveryDate = deliveryDate;
+	public int getId() {
+		return id;
 	}
 
-	@Override
-	public String toString() {
-		return "[Project: " + super.toString() + ", project_start: "
-				+ startDate + ", delivery_date: " + deliveryDate
-				+ ", total_budget =" + totalBudget + "]"
-				+ System.lineSeparator();
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public BigDecimal getTotalBudget() {
+		return totalBudget;
+	}
+
+	public void setTotalBudget(BigDecimal totalBudget) {
+		this.totalBudget = totalBudget;
+	}
+
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDate getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(LocalDate deliveryDate) {
+		this.deliveryDate = deliveryDate;
 	}
 
 }

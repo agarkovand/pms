@@ -20,6 +20,7 @@
         <property name="hibernate.connection.release_mode">auto</property>
         
         <mapping class="model.Customer"/>
+        <mapping class="model.Project"/>
 
 
     </session-factory>

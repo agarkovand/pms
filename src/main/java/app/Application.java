@@ -1,5 +1,8 @@
 package app;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -7,6 +10,7 @@ import org.hibernate.Transaction;
 import model.Address;
 import model.Customer;
 import model.Email;
+import model.Project;
 
 public class Application {
 
@@ -72,7 +76,25 @@ public class Application {
 		customer.getEmails().add(email);
 		customer.getEmails().add(email2);
 
+		Project project1 = createProject("Project 3");
+		Project project2 = createProject("Project 4");
+
+		customer.getProjects().add(project1);
+		customer.getProjects().add(project2);
+
 		return customer;
+	}
+
+	private static Project createProject(String name) {
+
+		Project project = new Project();
+
+		project.setName(name);
+		project.setTotalBudget(new BigDecimal(2500));
+		project.setStartDate(LocalDate.now());
+		project.setDeliveryDate(LocalDate.of(2018, 12, 31));
+
+		return project;
 	}
 
 	private static Customer createCustomer2() {
@@ -94,6 +116,12 @@ public class Application {
 
 		customer.getEmails().add(email);
 		customer.getEmails().add(email2);
+
+		Project project1 = createProject("Project 1");
+		Project project2 = createProject("Project 2");
+
+		customer.getProjects().add(project1);
+		customer.getProjects().add(project2);
 
 		return customer;
 	}

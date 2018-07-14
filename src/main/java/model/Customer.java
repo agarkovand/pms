@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -12,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,7 +22,6 @@ public class Customer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
 	private Long id;
 
 	private String name;
@@ -36,6 +37,10 @@ public class Customer {
 	@CollectionTable(name = "customer_phone", joinColumns = @JoinColumn(name = "customer_id"))
 	@Column(name = "phone")
 	private List<String> phones = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "customer_id", nullable = false)
+	private List<Project> projects = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -67,6 +72,10 @@ public class Customer {
 
 	public List<String> getPhones() {
 		return phones;
+	}
+
+	public List<Project> getProjects() {
+		return projects;
 	}
 
 }
