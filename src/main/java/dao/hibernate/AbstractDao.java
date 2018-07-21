@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Session;
 
 import app.HibernateUtil;
@@ -36,8 +39,8 @@ public class AbstractDao<T, ID extends Serializable>
 
 		try {
 
-			session = getSession();
-			result = (T) session.get(getPersistentClass(), id);
+			session = this.getSession();
+			result = (T) session.get(this.getPersistentClass(), id);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,8 +53,28 @@ public class AbstractDao<T, ID extends Serializable>
 
 	@Override
 	public List<T> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+
+		Session session = null;
+		List<T> result = null;
+
+		try {
+
+			session = this.getSession();
+
+			CriteriaQuery<T> criteria = session.getCriteriaBuilder()
+					.createQuery(this.getPersistentClass());
+
+			Root<T> root = criteria.from(this.getPersistentClass());
+
+			result = session.createQuery(criteria).getResultList();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return result;
 	}
 
 	@Override

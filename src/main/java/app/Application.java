@@ -2,8 +2,10 @@ package app;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import dao.hibernate.CustomerHibernateDao;
+import dao.interfaces.CustomerDao;
 import model.Address;
 import model.Customer;
 import model.Email;
@@ -13,9 +15,17 @@ public class Application {
 
 	public static void main(String[] args) {
 
-		Customer customer = new CustomerHibernateDao().findById(2L);
+		CustomerDao dao = new CustomerHibernateDao();
+
+		Customer customer = dao.findById(2L);
 
 		System.out.println(customer.getName());
+
+		List<Customer> customers = dao.findAll();
+
+		for (Customer c : customers) {
+			System.out.println(c.getName());
+		}
 
 	}
 
