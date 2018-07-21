@@ -1,4 +1,4 @@
-package repository.exception;
+package dao.exception;
 
 import java.sql.SQLException;
 

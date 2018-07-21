@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import repository.exception.DAOException;
+import dao.exception.DAOException;
 
 public class DataSourceMySqlManagerTest {
 

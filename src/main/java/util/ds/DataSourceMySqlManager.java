@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-import repository.exception.DAOException;
+import dao.exception.DAOException;
 
 public class DataSourceMySqlManager {
 

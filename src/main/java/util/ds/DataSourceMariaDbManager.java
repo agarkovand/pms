@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 import org.mariadb.jdbc.MariaDbDataSource;
 
-import repository.exception.DAOException;
+import dao.exception.DAOException;
 
 public class DataSourceMariaDbManager {
 

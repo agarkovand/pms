@@ -3,10 +3,7 @@ package app;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-
+import dao.hibernate.CustomerHibernateDao;
 import model.Address;
 import model.Customer;
 import model.Email;
@@ -16,20 +13,9 @@ public class Application {
 
 	public static void main(String[] args) {
 
-		SessionFactory sessionfactory = HibernateUtil
-				.getSessionFactory();
+		Customer customer = new CustomerHibernateDao().findById(2L);
 
-		Session session = sessionfactory.openSession();
-		Transaction transaction = session.beginTransaction();
-
-		Customer customer = createCustomer();
-		Customer customer2 = createCustomer2();
-
-		session.save(customer);
-		session.save(customer2);
-
-		transaction.commit();
-		sessionfactory.close();
+		System.out.println(customer.getName());
 
 	}
 

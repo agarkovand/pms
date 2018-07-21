@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import repository.exception.DAOException;
+import dao.exception.DAOException;
 
 public class ConnectionUtil {
 
