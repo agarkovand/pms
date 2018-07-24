@@ -15,17 +15,43 @@ public class Application {
 
 	public static void main(String[] args) {
 
+		// Customer cust = createCustomer();
+
 		CustomerDao dao = new CustomerHibernateDao();
 
-		Customer customer = dao.findById(2L);
-
-		System.out.println(customer.getName());
-
-		List<Customer> customers = dao.findAll();
+		List<Customer> customers = dao
+				.findCustomersByCountry("Ukraine");
 
 		for (Customer c : customers) {
 			System.out.println(c.getName());
 		}
+
+		// dao.save(cust);
+
+		// Customer customer = dao.findById(4L);
+		//
+		// customer = dao.fetchEmails(customer);
+		//
+		// List<Email> emails = customer.getEmails();
+		//
+		// for (Email e : emails) {
+		// System.out
+		// .println("" + e.getKind() + ": " + e.getEmail());
+		// }
+
+		// Address address = customer.getAddress();
+		//
+		// System.out.println("Going to delete: " + customer.getName()
+		// + ": " + address.getAddressLine() + ", "
+		// + address.getCity());
+
+		// dao.delete(customerDel);
+
+		// List<Customer> customers = dao.findAll();
+		//
+		// for (Customer c : customers) {
+		// System.out.println(c.getName());
+		// }
 
 	}
 

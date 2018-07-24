@@ -10,6 +10,6 @@ public interface Dao<T, ID> {
 
 	public T save(T entity);
 
-	public int delete(T entity);
+	public void delete(T entity);
 
 }

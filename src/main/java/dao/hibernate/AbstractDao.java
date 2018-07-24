@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import app.HibernateUtil;
 import dao.interfaces.Dao;
@@ -61,12 +63,15 @@ public class AbstractDao<T, ID extends Serializable>
 
 			session = this.getSession();
 
-			CriteriaQuery<T> criteria = session.getCriteriaBuilder()
+			CriteriaBuilder cb = session.getCriteriaBuilder();
+			CriteriaQuery<T> criteria = cb
 					.createQuery(this.getPersistentClass());
 
-			Root<T> root = criteria.from(this.getPersistentClass());
+			Root<T> from = criteria.from(this.getPersistentClass());
+			CriteriaQuery<T> select = criteria.select(from);
 
-			result = session.createQuery(criteria).getResultList();
+			Query<T> query = session.createQuery(select);
+			result = query.getResultList();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,14 +84,48 @@ public class AbstractDao<T, ID extends Serializable>
 
 	@Override
 	public T save(T entity) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = null;
+		org.hibernate.Transaction tx = null;
+
+		try {
+
+			session = this.getSession();
+			tx = session.beginTransaction();
+
+			session.saveOrUpdate(entity);
+
+			tx.commit();
+
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+			return null;
+		} finally {
+			session.close();
+		}
+
+		return entity;
 	}
 
 	@Override
-	public int delete(T entity) {
-		// TODO Auto-generated method stub
-		return 0;
+	public void delete(T entity) {
+		Session session = null;
+		org.hibernate.Transaction tx = null;
+		try {
+
+			System.out.println(
+					"Deleting entity of class: " + entity.getClass());
+			session = this.getSession();
+			tx = session.beginTransaction();
+			session.delete(entity);
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
 	}
 
 }
